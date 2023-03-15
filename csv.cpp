@@ -1,14 +1,14 @@
 // Code for reading csv files from
 // https://stackoverflow.com/questions/1120140/how-can-i-read-and-parse-csv-files-in-c
 
+#include "csv.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include "csv.hpp"
 
 std::string_view CSVRow::operator[](std::size_t index) const {
   return std::string_view(&m_line[m_data[index] + 1], m_data[index + 1] - (m_data[index] + 1));
