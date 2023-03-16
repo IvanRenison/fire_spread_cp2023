@@ -11,6 +11,7 @@
 typedef struct _s_Cell {
   double elevation;
   double wind_direction;
+  bool burnable;
   double data[NDATA];
 } Cell;
 
