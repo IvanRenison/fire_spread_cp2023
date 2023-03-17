@@ -6,13 +6,15 @@
 
 #include "types.h"
 
-#define NDATA 5
+#define N_BOOLEAN_DATA 3
+#define N_FLOATING_DATA 2
 
 typedef struct _s_Cell {
   double elevation;
   double wind_direction;
   bool burnable;
-  double data[NDATA];
+  bool boolean_data[N_BOOLEAN_DATA];
+  double floating_data[N_FLOATING_DATA];
 } Cell;
 
 class Landscape {
@@ -21,7 +23,7 @@ public:
   uint height;
 
   Landscape(uint width, uint height);
-  Landscape(uint width, uint height, std::string filename);
+  Landscape(/* File parameters */);
 
   Cell* operator[](size_t index1, size_t index2) const;
 

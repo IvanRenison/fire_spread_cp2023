@@ -19,8 +19,12 @@ double spread_probability(
 
   double linpred = params.independent_pred;
 
-  for (int k = 0; k < NDATA; k++) {
-    linpred += params.preds[k] * neighbour->data[k];
+  for (int k = 0; k < N_BOOLEAN_DATA; k++) {
+    linpred += params.boolean_preds_coefs[k] * neighbour->boolean_data[k];
+  }
+
+  for (int k = 0; k < N_FLOATING_DATA; k++) {
+    linpred += params.floating_preds_coefs[k] * neighbour->floating_data[k];
   }
 
   linpred += wind_term * params.wind_pred + elev_term * params.elevation_pred +

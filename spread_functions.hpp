@@ -11,7 +11,8 @@ typedef struct _s_simulation_params {
   double wind_pred;
   double elevation_pred;
   double slope_pred;
-  double preds[NDATA];
+  double boolean_preds_coefs[N_BOOLEAN_DATA];
+  double floating_preds_coefs[N_FLOATING_DATA];
 } SimulationParams;
 
 Fire simulate_fire(
