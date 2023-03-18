@@ -5,6 +5,7 @@
 #include <string>
 
 #include "types.h"
+#include "csv.hpp"
 
 #define N_BOOLEAN_DATA 3
 #define N_FLOATING_DATA 2
@@ -23,7 +24,7 @@ public:
   uint height;
 
   Landscape(uint width, uint height);
-  Landscape(/* File parameters */);
+  Landscape(std::string filename_prefix);
 
   Cell* operator[](size_t index1, size_t index2) const;
 
