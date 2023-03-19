@@ -14,9 +14,11 @@ public:
     elems = new T[width * height];
   };
 
-  T* operator[](size_t index1, size_t index2) const { return &elems[index1 * width + index2] };
+  T* operator[](size_t index1, size_t index2) const {
+    return &elems[index1 * width + index2];
+  };
 
-private:
+protected:
   T* elems;
 };
 
