@@ -16,8 +16,8 @@ Landscape::Landscape(std::string filename_prefix) {
       first_loop = !first_loop;
       continue;
     }
-    this->height = atoi((*loop)[0].data());
-    this->width = atoi((*loop)[1].data());
+    this->width = atoi((*loop)[0].data());
+    this->height = atoi((*loop)[1].data());
   }
 
   cells = new Cell[this->height * this->width];
