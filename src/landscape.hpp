@@ -4,8 +4,8 @@
 #include <cstddef>
 #include <string>
 
-#include "types.h"
 #include "csv.hpp"
+#include "types.h"
 
 typedef struct _s_Cell {
   double elevation;
@@ -34,6 +34,5 @@ public:
 private:
   Cell* cells;
 };
-
 
 #endif
