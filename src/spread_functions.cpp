@@ -55,12 +55,12 @@ Fire simulate_fire(
 
   int burning_size = end + 1;
 
-  bool* burned_bin = new bool[n_row * n_col];
+  Matrix<bool> burned_bin = Matrix<bool>(n_row, n_col);
 
   for (int i = 0; i <= end; i++) {
     uint cell_0 = ignition_cells[i].first;
     uint cell_1 = ignition_cells[i].second;
-    burned_bin[cell_0 * n_col + cell_1] = 1;
+    burned_bin[cell_0, cell_1] = 1;
   }
 
   while (burning_size > 0) {
@@ -106,7 +106,7 @@ Fire simulate_fire(
 
         // Is the cell burnable?
         bool burnable_cell =
-            burned_bin[neighbour_cell_0 * n_col + neighbour_cell_1] & neighbour_cell->burnable;
+            burned_bin[neighbour_cell_0, neighbour_cell_1] && neighbour_cell->burnable;
 
         if (!burnable_cell)
           continue;
@@ -133,7 +133,7 @@ Fire simulate_fire(
         end_forward += 1;
         burned_ids[end_forward].first = neighbour_cell_0;
         burned_ids[end_forward].second = neighbour_cell_1;
-        burned_bin[neighbour_cell_0 * n_col + neighbour_cell_1] = true;
+        burned_bin[neighbour_cell_0, neighbour_cell_1] = true;
 
       } // end loop over neighbours_coords of burning cell b
 

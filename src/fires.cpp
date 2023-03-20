@@ -11,15 +11,15 @@ FireStats get_fire_stats(Fire fire, Landscape landscape) {
     uint x = cell_xy.first;
     uint y = cell_xy.second;
 
-    Cell cell = landscape[x, y];
+    Cell* cell = landscape[x, y];
 
-    if (cell.subalpine) {
+    if (cell->subalpine) {
       stats.counts_veg_subalpine++;
     }
-    else if (cell.wet) {
+    else if (cell->wet) {
       stats.counts_veg_wet++;
     }
-    else if (cell.dry) {
+    else if (cell->dry) {
       stats.counts_veg_dry++;
     }
     else {

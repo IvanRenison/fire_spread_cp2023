@@ -19,4 +19,6 @@ IgnitionCells read_ignition_cells(std::string filename) {
   for (; loop != CSVIterator(); ++loop) {
     ignition_cells.push_back({ atoi((*loop)[0].data()), atoi((*loop)[1].data()) });
   }
+
+  return ignition_cells;
 }

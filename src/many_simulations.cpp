@@ -4,7 +4,7 @@
 #include <cmath>
 
 compare_result compare_fires(
-    Fire fire1, FireStats fire1stats, Fire fire2, FireStats fire2stats, double lscale = 0.2
+    Fire fire1, FireStats fire1stats, Fire fire2, FireStats fire2stats, double lscale
 ) {
 
   assert(fire1.width == fire2.width && fire1.height == fire2.height);
@@ -59,7 +59,6 @@ compare_result compare_fires(
   // normalized difference using absolute difference. The difference by veg_type
   // is in [0, 1]. So, if we divide delta_norm by 4 (veg_num), it will be in [0, 1].
   double delta_norm = 0.0;
-  double delta_pow = 0.0;
 
   double sum_area = (double)(fire1stats.counts_veg_matorral + fire2stats.counts_veg_matorral);
   if (sum_area > 0.0) {
@@ -101,7 +100,7 @@ compare_result compare_fires(
 std::vector<compare_result> emulate_loglik_particle(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     SimulationParams params, double distance, double elevation_mean, double elevation_sd,
-    double upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates = 10
+    double upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates
 ) {
 
   std::vector<compare_result> similarity(n_replicates);
@@ -124,7 +123,7 @@ std::vector<std::vector<compare_result>> emulate_loglik(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     std::vector<SimulationParams> particles, double distance, double elevation_mean,
     double elevation_sd, double upper_limit, Fire fire_ref, FireStats fire_ref_stats,
-    int n_replicates = 10
+    int n_replicates
 ) {
 
   int n_particles = particles.size();
