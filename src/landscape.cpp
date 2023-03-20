@@ -40,7 +40,7 @@ Landscape::Landscape(std::string filename_prefix) {
     cells[i].aspect = atof((*loop)[4].data());
     cells[i].wind_direction = atof((*loop)[5].data());
     cells[i].elevation = atof((*loop)[6].data());
-    cells[i].burnable = atof((*loop)[7].data());
+    cells[i].burnable = atoi((*loop)[7].data());
     i++;
   }
 }
