@@ -8,3 +8,6 @@ all: main
 
 main:
 	$(CC) $(CPPFLAGS) $(CPPOPTFLAGS) *.cpp
+
+clean:
+	rm -f *.o a.out a.exe
