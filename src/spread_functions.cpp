@@ -96,8 +96,8 @@ Fire simulate_fire(
         uint neighbour_cell_1 = neighbours_coords[1][n];
 
         // Is the cell in range?
-        bool out_of_range = neighbour_cell_0 >= n_row || // check rows
-                            neighbour_cell_1 >= n_col    // check cols
+        bool out_of_range = neighbour_cell_0 >= n_col || // check rows
+                            neighbour_cell_1 >= n_row    // check cols
             ;
         // This is okey if n_row, n_col < UINT_MAX
         if (out_of_range)
