@@ -46,5 +46,5 @@ Landscape::Landscape(std::string filename_prefix) {
 }
 
 Cell* Landscape::operator[](size_t index1, size_t index2) const {
-    return &cells[index1 * width + index2];
+    return &cells[index2 * width + index1];
 }

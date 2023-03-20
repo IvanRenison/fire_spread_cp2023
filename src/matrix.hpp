@@ -15,7 +15,7 @@ public:
   };
 
   T& operator[](size_t index1, size_t index2) const {
-    return elems[index1 * width + index2];
+    return elems[index2 * width + index1];
   };
 
 protected:
