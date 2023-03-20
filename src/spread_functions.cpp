@@ -44,13 +44,14 @@ Fire simulate_fire(
   uint n_col = landscape.width;
   uint n_cell = n_row * n_col;
 
-  std::vector<std::pair<uint, uint>> burned_ids(n_cell);
+  std::vector<std::pair<uint, uint>> burned_ids;
+  burned_ids.reserve(n_cell);
 
   int start = 0;
   int end = ignition_cells.size() - 1;
 
   for (int i = 0; i <= end; i++) {
-    burned_ids[i] = ignition_cells[i];
+    burned_ids.push_back(ignition_cells[i]);
   }
 
   int burning_size = end + 1;
@@ -131,8 +132,7 @@ Fire simulate_fire(
         // set 1 in burned_bin
         // (but advance end_forward first)
         end_forward += 1;
-        burned_ids[end_forward].first = neighbour_cell_0;
-        burned_ids[end_forward].second = neighbour_cell_1;
+        burned_ids.push_back({ neighbour_cell_0, neighbour_cell_1 });
         burned_bin[neighbour_cell_0, neighbour_cell_1] = true;
 
       } // end loop over neighbours_coords of burning cell b
