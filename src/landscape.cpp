@@ -33,11 +33,11 @@ Landscape::Landscape(std::string filename_prefix) {
       first_loop = !first_loop;
       continue;
     }
-    cells[i].boolean_data[0] = atoi((*loop)[0].data());
-    cells[i].boolean_data[1] = atoi((*loop)[1].data());
-    cells[i].boolean_data[2] = atoi((*loop)[2].data());
-    cells[i].floating_data[0] = atof((*loop)[3].data());
-    cells[i].floating_data[1] = atof((*loop)[4].data());
+    cells[i].subalpine = atoi((*loop)[0].data());
+    cells[i].wet = atoi((*loop)[1].data());
+    cells[i].dry = atoi((*loop)[2].data());
+    cells[i].fwi = atof((*loop)[3].data());
+    cells[i].aspect = atof((*loop)[4].data());
     cells[i].wind_direction = atof((*loop)[5].data());
     cells[i].elevation = atof((*loop)[6].data());
     cells[i].burnable = atof((*loop)[7].data());

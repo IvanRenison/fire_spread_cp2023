@@ -7,15 +7,18 @@
 #include "types.h"
 #include "csv.hpp"
 
-#define N_BOOLEAN_DATA 3
-#define N_FLOATING_DATA 2
-
 typedef struct _s_Cell {
   double elevation;
   double wind_direction;
   bool burnable;
-  bool boolean_data[N_BOOLEAN_DATA];
-  double floating_data[N_FLOATING_DATA];
+  // There are 4 types of vegetation: matorral, subalpine, wet, dry
+  // bools subalpine, wet and dry are exclusive, and when the three are false,
+  // the vegetation is matorral
+  bool subalpine;
+  bool wet;
+  bool dry;
+  double fwi;
+  double aspect;
 } Cell;
 
 class Landscape {
