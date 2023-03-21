@@ -11,7 +11,7 @@ public:
   Matrix(size_t width, size_t height) {
     this->width = width;
     this->height = height;
-    elems = new T[width * height];
+    elems = new T[width * height]();
   };
 
   T& operator[](size_t index1, size_t index2) const {
