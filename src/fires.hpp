@@ -25,6 +25,8 @@ typedef struct _s_FireStats {
   uint counts_veg_dry;
 } FireStats;
 
+Fire read_fire(uint width, uint height, std::string filename_prefix);
+
 FireStats get_fire_stats(Fire fire, Landscape landscape);
 
 #endif
