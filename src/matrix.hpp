@@ -25,7 +25,7 @@ public:
 
     for (size_t i = 0; i < width; i++) {
       for (size_t j = 0; j < height; j++) {
-        if (elems[j][i] != other.elems[j][i]) {
+        if (elems[j * width + i] != other.elems[j * width + i]) {
           return false;
         }
       }
