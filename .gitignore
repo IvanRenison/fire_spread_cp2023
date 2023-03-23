@@ -5,3 +5,5 @@ a.out
 # ignore csv files except for the ones in the test folder
 *.csv
 !src/test/*.csv
+
+src/test/test
