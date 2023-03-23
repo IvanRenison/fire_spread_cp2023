@@ -18,6 +18,22 @@ public:
     return elems[index2 * width + index1];
   };
 
+  bool operator==(const Matrix& other) const {
+    if (width != other.width || height != other.height) {
+      return false;
+    }
+
+    for (size_t i = 0; i < width; i++) {
+      for (size_t j = 0; j < height; j++) {
+        if (elems[j][i] != other.elems[j][i]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
 protected:
   T* elems;
 };

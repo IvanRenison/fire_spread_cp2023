@@ -23,11 +23,18 @@ int main(int argc, char* argv[]) {
   IgnitionCells ignition_cells = read_ignition_cells(landscape_file_prefix + "-ignition_points.csv");
 
   SimulationParams params = {
-    1000, 0, 0, 0, 0, 0, 0, 0, 0
+    0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1
   };
 
+  // Set seed
+  std::srand(10);
+
   // simulate de fire
-  Fire fire = simulate_fire(landscape, ignition_cells, params, 30, 1163.3, 399.5, 1);
+  Fire fire = simulate_fire(landscape, ignition_cells, params, 30, 1163.3, 399.5, 0.5);
+
+  for (std::pair<uint, uint> id : fire.burned_ids) {
+    std::cout << id.first << " " << id.second << std::endl;
+  }
 
   // print the fire
   std::cout << fire.burned_ids.size() << std::endl;

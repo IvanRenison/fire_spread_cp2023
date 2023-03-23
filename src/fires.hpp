@@ -16,6 +16,11 @@ typedef struct _s_Fire {
   Matrix<bool> burned_layer;
 
   std::vector<std::pair<uint, uint>> burned_ids;
+
+  bool operator==(const _s_Fire& other) const {
+    return width == other.width && height == other.height &&
+           burned_layer == other.burned_layer && burned_ids == other.burned_ids;
+  }
 } Fire;
 
 typedef struct _s_FireStats {
