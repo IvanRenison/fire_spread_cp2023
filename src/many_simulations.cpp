@@ -60,10 +60,32 @@ compare_result compare_fires(
   // is in [0, 1]. So, if we divide delta_norm by 4 (veg_num), it will be in [0, 1].
   double delta_norm = 0.0;
 
-  double sum_area = (double)(fire1stats.counts_veg_matorral + fire2stats.counts_veg_matorral);
-  if (sum_area > 0.0) {
+  double sum_area_matorral =
+      ((double)fire1stats.counts_veg_matorral + (double)fire2stats.counts_veg_matorral);
+  if (sum_area_matorral > 0.0) {
     delta_norm += std::abs(
-        (double)(fire1stats.counts_veg_matorral - fire2stats.counts_veg_matorral) / sum_area
+        ((double)fire1stats.counts_veg_matorral - (double)fire2stats.counts_veg_matorral) /
+        sum_area_matorral
+    );
+  }
+  double sum_area_subalpine =
+      ((double)fire1stats.counts_veg_subalpine + (double)fire2stats.counts_veg_subalpine);
+  if (sum_area_subalpine > 0.0) {
+    delta_norm += std::abs(
+        ((double)fire1stats.counts_veg_subalpine - (double)fire2stats.counts_veg_subalpine) /
+        sum_area_subalpine
+    );
+  }
+  double sum_area_wet = ((double)fire1stats.counts_veg_wet + (double)fire2stats.counts_veg_wet);
+  if (sum_area_wet > 0.0) {
+    delta_norm += std::abs(
+        ((double)fire1stats.counts_veg_wet - (double)fire2stats.counts_veg_wet) / sum_area_wet
+    );
+  }
+  double sum_area_dry = ((double)fire1stats.counts_veg_dry + (double)fire2stats.counts_veg_dry);
+  if (sum_area_dry > 0.0) {
+    delta_norm += std::abs(
+        ((double)fire1stats.counts_veg_dry - (double)fire2stats.counts_veg_dry) / sum_area_dry
     );
   }
 
