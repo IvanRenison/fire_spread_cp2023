@@ -12,6 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install g++12
+      run: |
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get -y install g++-12
     - name: make and run
       working-directory: src
-      run: make test
+      run: make CC=g++-12 test
