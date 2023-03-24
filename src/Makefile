@@ -14,7 +14,7 @@ main: $(files) $(headers) main.cpp
 
 test: $(files) $(headers) test/test.cpp test/*.csv
 	$(CC) $(CPPFLAGS) $(CPPOPTFLAGS) -I. test/test.cpp $(files) -o test/test
-	./test/test
+	cd test && ./test
 
 clean:
 	rm -f *.o a.out test/test
