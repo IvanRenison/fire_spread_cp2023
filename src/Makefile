@@ -17,3 +17,5 @@ test: $(files) $(headers) test/test.cpp test/*.csv
 
 clean:
 	rm -f *.o a.out test/test
+
+.PHONY: all test clean
