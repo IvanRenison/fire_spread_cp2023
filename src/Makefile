@@ -3,8 +3,7 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++23
 
 CPPOPTFLAGS = -O2
 
-files = $(wildcard *.cpp)
-files := $(filter-out main.cpp,$(files))
+files = $(filter-out main.cpp,$(wildcard *.cpp))
 headers = $(wildcard *.hpp)
 
 all: main
