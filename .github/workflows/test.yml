@@ -17,6 +17,9 @@ jobs:
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get -y install g++-12
-    - name: make and run
+    - name: make and run test
       working-directory: src
       run: make CC=g++-12 test
+    - name: make main
+      working-directory: src
+      run: make CC=g++-12 main
