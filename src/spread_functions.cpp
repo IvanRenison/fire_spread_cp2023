@@ -148,3 +148,11 @@ Fire simulate_fire(
 
   return { n_col, n_row, burned_bin, burned_ids };
 }
+
+SimulationParams random_params() {
+  return { (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX };
+}

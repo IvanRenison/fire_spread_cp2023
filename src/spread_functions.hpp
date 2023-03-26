@@ -24,4 +24,6 @@ Fire simulate_fire(
     double upper_limit
 );
 
+SimulationParams random_params();
+
 #endif
