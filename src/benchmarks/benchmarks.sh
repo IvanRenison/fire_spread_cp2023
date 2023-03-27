@@ -13,8 +13,8 @@ files_o=$(echo $files_cpp | sed 's/\.\.\///g' | sed 's/\.cpp/\.o/g')
 # $4: Optimization level
 
 with_object_files() {
-  $1 -std=c++23 -O$4 -I../ -c $files_cpp
-  $1 -std=c++23 -O$4 -I../ $files_o $2 -o $3
+  $1 -std=c++23 -DNDEBUG -O$4 -I../ -c $files_cpp
+  $1 -std=c++23 -DNDEBUG -O$4 -I../ $files_o $2 -o $3
 }
 
 without_object_files() {
@@ -28,34 +28,22 @@ do
   benchmark=$(echo $benchmark_cpp | sed 's/\.cpp//g')
   # Remove ./benchmark from start
 
+  echo ""
   echo "####################"
   echo $(echo $benchmark | sed 's/\.\///g')
   echo ""
 
-  with_object_files g++-12 $benchmark_cpp $benchmark 1
-  echo "g++ with intermediate object files and -O1"
-  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  for compilation in with_object_files without_object_files
+  do
 
-  with_object_files g++-12 $benchmark_cpp $benchmark 2
-  echo "g++ with intermediate object files and -O2"
-  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+    for opt_level in 0 1 2 3
+    do
+      $compilation g++-12 $benchmark_cpp $benchmark $opt_level
+      echo "g++ $compilation and -O$opt_level"
+      /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
 
-  with_object_files g++-12 $benchmark_cpp $benchmark 3
-  echo "g++ with intermediate object files and -O3"
-  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
-
-  echo ""
-
-  without_object_files g++-12 $benchmark_cpp $benchmark 1
-  echo "g++ without intermediate object files and -O1"
-  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
-
-  without_object_files g++-12 $benchmark_cpp $benchmark 2
-  echo "g++ without intermediate object files and -O2"
-  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
-
-  without_object_files g++-12 $benchmark_cpp $benchmark 3
-  echo "g++ without intermediate object files and -O3"
-  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+    done
+    echo ""
+  done
 done
 
