@@ -48,9 +48,9 @@ Fire simulate_fire(
   burned_ids.reserve(n_cell);
 
   int start = 0;
-  int end = ignition_cells.size() - 1;
+  int end = ignition_cells.size();
 
-  for (int i = 0; i <= end; i++) {
+  for (int i = 0; i < end; i++) {
     burned_ids.push_back(ignition_cells[i]);
   }
 
@@ -58,7 +58,7 @@ Fire simulate_fire(
 
   Matrix<bool> burned_bin = Matrix<bool>(n_col, n_row);
 
-  for (int i = 0; i <= end; i++) {
+  for (int i = 0; i < end; i++) {
     uint cell_0 = ignition_cells[i].first;
     uint cell_1 = ignition_cells[i].second;
     burned_bin[cell_0, cell_1] = 1;
@@ -71,7 +71,7 @@ Fire simulate_fire(
 
     // b is going to keep the position in burned_ids that have to be evaluated
     // in this burn cycle
-    for (int b = start; b <= end; b++) {
+    for (int b = start; b < end; b++) {
       uint burning_cell_0 = burned_ids[b].first;
       uint burning_cell_1 = burned_ids[b].second;
 
@@ -140,9 +140,9 @@ Fire simulate_fire(
     } // end loop over burning cells from this cycle
 
     // update start and end
-    start = end + 1;
+    start = end;
     end = end_forward;
-    burning_size = end - start + 1;
+    burning_size = end - start;
 
   } // end while
 
