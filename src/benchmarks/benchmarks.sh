@@ -21,30 +21,41 @@ without_object_files() {
   $1 -std=c++23 -O$4 -I../ $files_cpp $2 -o $3
 }
 
+benchmarks=$(ls ./*.cpp)
 
+for benchmark_cpp in $benchmarks
+do
+  benchmark=$(echo $benchmark_cpp | sed 's/\.cpp//g')
+  # Remove ./benchmark from start
 
-with_object_files g++-12 benchmark_simulate_fire.cpp benchmark_simulate_fire 1
-echo "g++ with intermediate object files and -O1"
-/usr/bin/time ./benchmark_simulate_fire 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  echo "####################"
+  echo $(echo $benchmark | sed 's/\.\///g')
+  echo ""
 
-with_object_files g++-12 benchmark_simulate_fire.cpp benchmark_simulate_fire 2
-echo "g++ with intermediate object files and -O2"
-/usr/bin/time ./benchmark_simulate_fire 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  with_object_files g++-12 $benchmark_cpp $benchmark 1
+  echo "g++ with intermediate object files and -O1"
+  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
 
-with_object_files g++-12 benchmark_simulate_fire.cpp benchmark_simulate_fire 3
-echo "g++ with intermediate object files and -O3"
-/usr/bin/time ./benchmark_simulate_fire 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  with_object_files g++-12 $benchmark_cpp $benchmark 2
+  echo "g++ with intermediate object files and -O2"
+  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
 
-echo ""
+  with_object_files g++-12 $benchmark_cpp $benchmark 3
+  echo "g++ with intermediate object files and -O3"
+  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
 
-without_object_files g++-12 benchmark_simulate_fire.cpp benchmark_simulate_fire 1
-echo "g++ without intermediate object files and -O1"
-/usr/bin/time ./benchmark_simulate_fire 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  echo ""
 
-without_object_files g++-12 benchmark_simulate_fire.cpp benchmark_simulate_fire 2
-echo "g++ without intermediate object files and -O2"
-/usr/bin/time ./benchmark_simulate_fire 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  without_object_files g++-12 $benchmark_cpp $benchmark 1
+  echo "g++ without intermediate object files and -O1"
+  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
 
-without_object_files g++-12 benchmark_simulate_fire.cpp benchmark_simulate_fire 3
-echo "g++ without intermediate object files and -O3"
-/usr/bin/time ./benchmark_simulate_fire 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+  without_object_files g++-12 $benchmark_cpp $benchmark 2
+  echo "g++ without intermediate object files and -O2"
+  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+
+  without_object_files g++-12 $benchmark_cpp $benchmark 3
+  echo "g++ without intermediate object files and -O3"
+  /usr/bin/time ./$benchmark 2>&1 | awk 'NR==1{print $1 " " $2 " " $3;}'
+done
+

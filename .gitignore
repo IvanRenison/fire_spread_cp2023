@@ -9,3 +9,4 @@ a.out
 
 src/test/test
 src/benchmarks/benchmark_simulate_fire
+src/benchmarks/benchmark_emulate_loglik
