@@ -5,5 +5,7 @@ a.out
 # ignore csv files except for the ones in the test folder
 *.csv
 !src/test/*.csv
+!src/benchmarks/*.csv
 
 src/test/test
+src/benchmarks/benchmark_simulate_fire
