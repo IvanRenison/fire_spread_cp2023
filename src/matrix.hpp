@@ -34,8 +34,8 @@ public:
     return true;
   };
 
-protected:
   T* elems;
+
 };
 
 #endif

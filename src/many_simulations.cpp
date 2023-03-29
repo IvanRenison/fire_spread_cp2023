@@ -136,6 +136,8 @@ std::vector<compare_result> emulate_loglik_particle(
 
     similarity[i] =
         compare_fires(fire_ref, fire_ref_stats, fire_sim, get_fire_stats(fire_sim, landscape));
+
+    delete fire_sim.burned_layer.elems;
   }
 
   return similarity;
