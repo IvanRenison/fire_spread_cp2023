@@ -80,20 +80,20 @@ Fire simulate_fire(
       const int moves[8][2] = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 },
                                 { 0, 1 },   { 1, -1 }, { 1, 0 },  { 1, 1 } };
 
-      uint neighbours_coords[2][8];
+      uint neighbors_coords[2][8];
 
       for (int i = 0; i < 8; i++) {
-        neighbours_coords[0][i] = burned_ids[b].first + moves[i][0];
-        neighbours_coords[1][i] = burned_ids[b].second + moves[i][1];
+        neighbors_coords[0][i] = burned_ids[b].first + moves[i][0];
+        neighbors_coords[1][i] = burned_ids[b].second + moves[i][1];
       }
       // Note that in the case 0 - 1 we will have UINT_MAX
 
-      // Loop over neighbours_coords of the focal burning cell
+      // Loop over neighbors_coords of the focal burning cell
 
       for (int n = 0; n < 8; n++) {
 
-        uint neighbour_cell_0 = neighbours_coords[0][n];
-        uint neighbour_cell_1 = neighbours_coords[1][n];
+        uint neighbour_cell_0 = neighbors_coords[0][n];
+        uint neighbour_cell_1 = neighbors_coords[1][n];
 
         // Is the cell in range?
         bool out_of_range = neighbour_cell_0 >= n_col || // check rows
@@ -135,7 +135,7 @@ Fire simulate_fire(
         burned_ids.push_back({ neighbour_cell_0, neighbour_cell_1 });
         burned_bin[neighbour_cell_0, neighbour_cell_1] = true;
 
-      } // end loop over neighbours_coords of burning cell b
+      } // end loop over neighbors_coords of burning cell b
 
     } // end loop over burning cells from this cycle
 
