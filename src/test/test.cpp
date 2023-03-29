@@ -26,7 +26,7 @@ int main() {
 
   // Load the read file
   std::cout << "Reading the original fire" << std::endl;
-  Fire r_fire = read_fire(5, 5, "mini_landscape");
+  Fire r_fire(5, 5, "mini_landscape");
 
   // Check that the two fires are equal
   std::cout << "Checking that the two fires are equal" << std::endl;

@@ -9,7 +9,8 @@
 #include "landscape.hpp"
 #include "matrix.hpp"
 
-typedef struct _s_Fire {
+class Fire {
+public:
   uint width;
   uint height;
 
@@ -17,11 +18,18 @@ typedef struct _s_Fire {
 
   std::vector<std::pair<uint, uint>> burned_ids;
 
-  bool operator==(const _s_Fire& other) const {
+  bool operator==(const Fire& other) const {
     return width == other.width && height == other.height &&
            burned_layer == other.burned_layer && burned_ids == other.burned_ids;
   }
-} Fire;
+
+  Fire(
+      uint width, uint height, Matrix<bool> burned_layer,
+      std::vector<std::pair<uint, uint>> burned_ids
+  )
+      : width(width), height(height), burned_layer(burned_layer), burned_ids(burned_ids){};
+  Fire(uint width, uint height, std::string filename_prefix);
+};
 
 typedef struct _s_FireStats {
   uint counts_veg_matorral;
@@ -29,8 +37,6 @@ typedef struct _s_FireStats {
   uint counts_veg_wet;
   uint counts_veg_dry;
 } FireStats;
-
-Fire read_fire(uint width, uint height, std::string filename_prefix);
 
 FireStats get_fire_stats(Fire fire, Landscape landscape);
 

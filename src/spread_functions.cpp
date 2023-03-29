@@ -146,7 +146,7 @@ Fire simulate_fire(
 
   } // end while
 
-  return { n_col, n_row, burned_bin, burned_ids };
+  return Fire(n_col, n_row, burned_bin, burned_ids);
 }
 
 SimulationParams random_params() {

@@ -3,7 +3,10 @@
 #include "landscape.hpp"
 #include "matrix.hpp"
 
-Fire read_fire(uint width, uint height, std::string filename_prefix) {
+Fire::Fire(uint width, uint height, std::string filename_prefix)
+    : Fire(width, height, Matrix<bool>(width, height), std::vector<std::pair<uint, uint>>()) {
+  this->width = width;
+  this->height = height;
 
   std::ifstream burned_ids_file(filename_prefix + "-burned_ids.csv");
 
@@ -14,9 +17,6 @@ Fire read_fire(uint width, uint height, std::string filename_prefix) {
   CSVIterator loop(burned_ids_file);
   loop++;
 
-  Matrix<bool> burned_layer(width, height);
-
-  std::vector<std::pair<uint, uint>> burned_ids;
   burned_ids.reserve(width * height);
 
   for (; loop != CSVIterator(); ++loop) {
@@ -31,7 +31,9 @@ Fire read_fire(uint width, uint height, std::string filename_prefix) {
     burned_layer[x, y] = true;
     burned_ids.push_back({ x, y });
   }
-  return { width, height, burned_layer, burned_ids };
+
+  this->burned_layer = burned_layer;
+  this->burned_ids = burned_ids;
 }
 
 FireStats get_fire_stats(Fire fire, Landscape landscape) {
