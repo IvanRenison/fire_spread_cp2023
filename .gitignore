@@ -2,7 +2,7 @@
 *.exe
 a.out
 
-# ignore csv files except for the ones in the test folder
+# ignore csv files except for the ones in the test and benchmarks folders
 *.csv
 !src/test/*.csv
 !src/benchmarks/*.csv
