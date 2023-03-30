@@ -13,8 +13,8 @@ int main(void) {
   SimulationParams params = { 1000, 1, 1, 1, 1, 1, 1, 1, 1 };
 
   std::srand(35);
-  std::vector<SimulationParams> particles(2);
-  for (size_t i = 0; i < 2; i++) {
+  std::vector<SimulationParams> particles(10);
+  for (size_t i = 0; i < 10; i++) {
     particles[i] = random_params();
   }
 
@@ -25,7 +25,7 @@ int main(void) {
       landscape, ignition_cells, particles, 30, 1163.3, 399.5, 0.5, fire, fire_stats, 2
   );
 
-  if (many_particles_result.size() != 2) {
+  if (many_particles_result.size() != 10) {
     std::cerr << "Error: the number of burned cells is not correct" << std::endl;
     return EXIT_FAILURE;
   }
