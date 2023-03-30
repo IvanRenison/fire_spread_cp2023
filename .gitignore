@@ -1,6 +1,8 @@
 *.o
 *.exe
 a.out
+*.data
+.vscode
 
 # ignore csv files except for the ones in the test and benchmarks folders
 *.csv

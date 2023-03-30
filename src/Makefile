@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++23
+CXXFLAGS = -Wall -Wextra -Werror -std=c++2b
 
 CPPOPTFLAGS = -O2
 

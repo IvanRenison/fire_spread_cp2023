@@ -1,5 +1,9 @@
 #include "spread_functions.hpp"
 
+#ifndef BENCHMARKING
+#define BENCHMARKING true
+#endif
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <random>
@@ -7,6 +11,7 @@
 
 #include "fires.hpp"
 #include "landscape.hpp"
+#include "wtime.hpp"
 
 double spread_probability(
     Cell* burning, Cell* neighbour, SimulationParams params, double angle, double distance,
@@ -64,8 +69,17 @@ Fire simulate_fire(
     burned_bin[cell_0, cell_1] = 1;
   }
 
+  double start_time, burned_cell_per_time, time_elapsed;
+
   while (burning_size > 0) {
     int end_forward = end;
+
+    start_time = 0.0;
+    burned_cell_per_time = 0.0;
+
+    if (BENCHMARKING) {
+      start_time = wtime();
+    }
 
     // Loop over burning cells in the cycle
 
@@ -138,7 +152,13 @@ Fire simulate_fire(
       } // end loop over neighbors_coords of burning cell b
 
     } // end loop over burning cells from this cycle
-
+    if (BENCHMARKING) {
+      time_elapsed = wtime() - start_time;
+      burned_cell_per_time = burning_size / time_elapsed;
+      std::cout.precision(17);
+      std::cout << burned_cell_per_time << "," << burning_size << "," << time_elapsed
+                << std::endl;
+    }
     // update start and end
     start = end;
     end = end_forward;
