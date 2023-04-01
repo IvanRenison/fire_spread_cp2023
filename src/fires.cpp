@@ -31,9 +31,6 @@ Fire::Fire(uint width, uint height, std::string filename_prefix)
     burned_layer[x, y] = true;
     burned_ids.push_back({ x, y });
   }
-
-  this->burned_layer = burned_layer;
-  this->burned_ids = burned_ids;
 }
 
 FireStats get_fire_stats(Fire fire, Landscape landscape) {
