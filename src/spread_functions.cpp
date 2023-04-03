@@ -75,7 +75,7 @@ Fire simulate_fire(
       uint burning_cell_0 = burned_ids[b].first;
       uint burning_cell_1 = burned_ids[b].second;
 
-      Cell* burning_cell = landscape[burning_cell_0, burning_cell_1];
+      Cell burning_cell = landscape[burning_cell_0, burning_cell_1];
 
       const int moves[8][2] = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 },
                                 { 0, 1 },   { 1, -1 }, { 1, 0 },  { 1, 1 } };
@@ -103,11 +103,11 @@ Fire simulate_fire(
         if (out_of_range)
           continue;
 
-        Cell* neighbour_cell = landscape[neighbour_cell_0, neighbour_cell_1];
+        Cell neighbour_cell = landscape[neighbour_cell_0, neighbour_cell_1];
 
         // Is the cell burnable?
         bool burnable_cell =
-            !burned_bin[neighbour_cell_0, neighbour_cell_1] && neighbour_cell->burnable;
+            !burned_bin[neighbour_cell_0, neighbour_cell_1] && neighbour_cell.burnable;
 
         if (!burnable_cell)
           continue;
@@ -117,7 +117,7 @@ Fire simulate_fire(
 
         // simulate fire
         double prob = spread_probability(
-            burning_cell, neighbour_cell, params, angles[n], distance, elevation_mean,
+            &burning_cell, &neighbour_cell, params, angles[n], distance, elevation_mean,
             elevation_sd, upper_limit
         );
 

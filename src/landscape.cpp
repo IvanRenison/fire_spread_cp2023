@@ -1,10 +1,7 @@
 #include "landscape.hpp"
 
-Landscape::Landscape(uint width, uint height) {
-  this->width = width;
-  this->height = height;
-  cells = new Cell[width * height];
-}
+Landscape::Landscape(uint width, uint height)
+    : width(width), height(height), cells(height * width) {}
 
 Landscape::Landscape(std::string filename_prefix) {
   std::ifstream metadata_file(filename_prefix + "-metadata.csv");
@@ -22,7 +19,7 @@ Landscape::Landscape(std::string filename_prefix) {
   width = atoi((*metadata_csv)[0].data());
   height = atoi((*metadata_csv)[1].data());
 
-  cells = new Cell[height * width];
+  cells = std::vector<Cell>(width * height);
 
   std::ifstream landscape_file(filename_prefix + "-landscape.csv");
 
@@ -48,6 +45,10 @@ Landscape::Landscape(std::string filename_prefix) {
   }
 }
 
-Cell* Landscape::operator[](size_t index1, size_t index2) const {
-  return &cells[index2 * width + index1];
+Cell Landscape::operator[](size_t index1, size_t index2) const {
+  return cells[index2 * width + index1];
+}
+
+Cell& Landscape::operator[](size_t index1, size_t index2) {
+  return cells[index2 * width + index1];
 }

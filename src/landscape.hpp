@@ -29,10 +29,11 @@ public:
   Landscape(uint width, uint height);
   Landscape(std::string filename_prefix);
 
-  Cell* operator[](size_t index1, size_t index2) const;
+  Cell operator[](size_t index1, size_t index2) const;
+  Cell& operator[](size_t index1, size_t index2);
 
 private:
-  Cell* cells;
+  std::vector<Cell> cells;
 };
 
 #endif
