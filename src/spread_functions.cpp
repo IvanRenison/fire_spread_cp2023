@@ -68,15 +68,14 @@ Fire simulate_fire(
     burned_bin[cell_0, cell_1] = 1;
   }
 
-  double start_time, burned_cell_per_time, time_elapsed;
-
   while (burning_size > 0) {
     int end_forward = end;
 
-    start_time = 0.0;
-    burned_cell_per_time = 0.0;
-
     #ifdef BENCHMARKING
+      double start_time, burned_cell_per_time, time_elapsed;
+      start_time = 0.0;
+      burned_cell_per_time = 0.0;
+
       start_time = wtime();
     #endif
 
