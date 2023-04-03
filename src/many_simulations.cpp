@@ -11,8 +11,8 @@ compare_result compare_fires(
 
   // Extract list elements ------------------------------------------------
 
-  Matrix<bool> burned1 = fire1.burned_layer;
-  Matrix<bool> burned2 = fire2.burned_layer;
+  Matrix<char> burned1 = fire1.burned_layer;
+  Matrix<char> burned2 = fire2.burned_layer;
 
   std::vector<std::pair<uint, uint>> burned_ids1 = fire1.burned_ids;
   std::vector<std::pair<uint, uint>> burned_ids2 = fire2.burned_ids;
@@ -136,8 +136,6 @@ std::vector<compare_result> emulate_loglik_particle(
 
     similarity[i] =
         compare_fires(fire_ref, fire_ref_stats, fire_sim, get_fire_stats(fire_sim, landscape));
-
-    delete fire_sim.burned_layer.elems;
   }
 
   return similarity;
