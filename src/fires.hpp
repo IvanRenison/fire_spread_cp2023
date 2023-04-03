@@ -14,7 +14,7 @@ public:
   uint width;
   uint height;
 
-  Matrix<bool> burned_layer;
+  Matrix<char> burned_layer;
 
   std::vector<std::pair<uint, uint>> burned_ids;
 
@@ -24,7 +24,7 @@ public:
   }
 
   Fire(
-      uint width, uint height, Matrix<bool> burned_layer,
+      uint width, uint height, Matrix<char> burned_layer,
       std::vector<std::pair<uint, uint>> burned_ids
   )
       : width(width), height(height), burned_layer(burned_layer), burned_ids(burned_ids){};

@@ -8,13 +8,13 @@ public:
   size_t width;
   size_t height;
 
-  Matrix(size_t width, size_t height) {
-    this->width = width;
-    this->height = height;
-    elems = new T[width * height]();
+  Matrix(size_t width, size_t height) : width(width), height(height), elems(width * height){};
+
+  T operator[](size_t index1, size_t index2) const {
+    return elems[index2 * width + index1];
   };
 
-  T& operator[](size_t index1, size_t index2) const {
+  T& operator[](size_t index1, size_t index2) {
     return elems[index2 * width + index1];
   };
 
@@ -34,8 +34,7 @@ public:
     return true;
   };
 
-  T* elems;
-
+  std::vector<T> elems;
 };
 
 #endif

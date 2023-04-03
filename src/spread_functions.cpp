@@ -56,7 +56,7 @@ Fire simulate_fire(
 
   int burning_size = end + 1;
 
-  Matrix<bool> burned_bin = Matrix<bool>(n_col, n_row);
+  Matrix<char> burned_bin = Matrix<char>(n_col, n_row);
 
   for (int i = 0; i < end; i++) {
     uint cell_0 = ignition_cells[i].first;

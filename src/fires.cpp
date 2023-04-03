@@ -4,7 +4,7 @@
 #include "matrix.hpp"
 
 Fire::Fire(uint width, uint height, std::string filename_prefix)
-    : Fire(width, height, Matrix<bool>(width, height), std::vector<std::pair<uint, uint>>()) {
+    : Fire(width, height, Matrix<char>(width, height), std::vector<std::pair<uint, uint>>()) {
   this->width = width;
   this->height = height;
 
