@@ -34,6 +34,8 @@ public:
   Cell operator[](size_t index1, size_t index2) const;
   Cell& operator[](size_t index1, size_t index2);
 
+  void print_csv() const;
+
 private:
   Matrix<Cell> cells;
 };

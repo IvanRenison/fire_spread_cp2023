@@ -1,12 +1,14 @@
 *.o
 *.exe
 a.out
+*.data
+.vscode
 
 # ignore csv files except for the ones in the test and benchmarks folders
 *.csv
 !src/test/*.csv
-!src/benchmarks/*.csv
+!benchmarks/*.csv
 
 src/test/test
-src/benchmarks/benchmark_simulate_fire
-src/benchmarks/benchmark_emulate_loglik
+benchmarks/benchmark_simulate_fire
+benchmarks/benchmark_emulate_loglik

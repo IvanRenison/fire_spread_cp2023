@@ -56,3 +56,17 @@ Cell Landscape::operator[](size_t index1, size_t index2) const {
 Cell& Landscape::operator[](size_t index1, size_t index2) {
   return cells[index2, index1];
 }
+
+void Landscape::print_csv() const {
+  std::cout << "\"subalpine\",\"wet\",\"dry\",\"fwi\",\"aspect\",\"wind\",\"elevation\",\"burnable\""
+            << std::endl;
+  for (uint i = 0; i < width; i++) {
+    for (uint j = 0; j < height; j++) {
+      std::cout << cells[i, j].subalpine << "," << cells[i, j].wet << ","
+                << cells[i, j].dry << "," << cells[i, j].fwi << ","
+                << cells[i, j].aspect << "," << cells[i, j].wind_direction << ","
+                << cells[i, j].elevation << "," << cells[i, j].burnable
+                << std::endl;
+    }
+  }
+}
