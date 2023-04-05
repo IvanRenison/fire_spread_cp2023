@@ -5,6 +5,8 @@
 #include <string>
 
 #include "csv.hpp"
+#include "matrix.hpp"
+
 #include "types.h"
 
 typedef struct _s_Cell {
@@ -33,7 +35,7 @@ public:
   Cell& operator[](size_t index1, size_t index2);
 
 private:
-  std::vector<Cell> cells;
+  Matrix<Cell> cells;
 };
 
 #endif
