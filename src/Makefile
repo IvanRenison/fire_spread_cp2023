@@ -1,5 +1,6 @@
-CC = g++
-CPPFLAGS = -Wall -Wextra -Werror -std=c++23
+CXX = g++
+CXXSTD = c++23
+CXXFLAGS = -Wall -Wextra -Werror -std=$(CXXSTD)
 
 CPPOPTFLAGS = -O2
 
@@ -9,10 +10,10 @@ headers = $(wildcard *.hpp)
 all: main
 
 main: $(files) $(headers) main.cpp
-	$(CC) $(CPPFLAGS) $(CPPOPTFLAGS) main.cpp $(files)
+	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) main.cpp $(files)
 
 test: $(files) $(headers) test/test.cpp test/*.csv
-	$(CC) $(CPPFLAGS) $(CPPOPTFLAGS) -I. test/test.cpp $(files) -o test/test
+	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) -I. test/test.cpp $(files) -o test/test
 	cd test && ./test
 
 clean:

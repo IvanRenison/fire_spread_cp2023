@@ -8,6 +8,10 @@
 #include "fires.hpp"
 #include "landscape.hpp"
 
+#ifdef BENCHMARKING
+  #include "wtime.hpp"
+#endif
+
 double spread_probability(
     Cell* burning, Cell* neighbour, SimulationParams params, double angle, double distance,
     double elevation_mean, double elevation_sd, double upper_limit = 1.0
@@ -66,6 +70,14 @@ Fire simulate_fire(
 
   while (burning_size > 0) {
     int end_forward = end;
+
+    #ifdef BENCHMARKING
+      double start_time, burned_cell_per_time, time_elapsed;
+      start_time = 0.0;
+      burned_cell_per_time = 0.0;
+
+      start_time = wtime();
+    #endif
 
     // Loop over burning cells in the cycle
 
@@ -138,7 +150,13 @@ Fire simulate_fire(
       } // end loop over neighbours_coords of burning cell b
 
     } // end loop over burning cells from this cycle
-
+    #ifdef BENCHMARKING
+      time_elapsed = wtime() - start_time;
+      burned_cell_per_time = burning_size / time_elapsed;
+      std::cout.precision(17);
+      std::cout << burned_cell_per_time << "," << burning_size << "," << time_elapsed
+                << std::endl;
+    #endif
     // update start and end
     start = end;
     end = end_forward;
@@ -147,4 +165,12 @@ Fire simulate_fire(
   } // end while
 
   return { n_col, n_row, burned_bin, burned_ids };
+}
+
+SimulationParams random_params() {
+  return { (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX,
+           (double)rand() / (double)RAND_MAX };
 }
