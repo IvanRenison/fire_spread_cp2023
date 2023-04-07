@@ -18,6 +18,11 @@ public:
 
   std::vector<std::pair<uint, uint>> burned_ids;
 
+  #ifdef GRAPHICS
+  // Positions in burned_ids where a new step starts
+  std::vector<uint> burned_ids_steps;
+  #endif
+
   bool operator==(const Fire& other) const {
     return width == other.width && height == other.height &&
            burned_layer == other.burned_layer && burned_ids == other.burned_ids;

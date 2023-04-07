@@ -9,7 +9,7 @@
 #include "landscape.hpp"
 
 #ifdef BENCHMARKING
-  #include "wtime.hpp"
+#include "wtime.hpp"
 #endif
 
 double spread_probability(
@@ -58,6 +58,11 @@ Fire simulate_fire(
     burned_ids.push_back(ignition_cells[i]);
   }
 
+#ifdef GRAPHICS
+  std::vector<uint> burned_ids_steps;
+  burned_ids_steps.push_back(end);
+#endif
+
   int burning_size = end + 1;
 
   Matrix<char> burned_bin = Matrix<char>(n_col, n_row);
@@ -71,13 +76,13 @@ Fire simulate_fire(
   while (burning_size > 0) {
     int end_forward = end;
 
-    #ifdef BENCHMARKING
-      double start_time, burned_cell_per_time, time_elapsed;
-      start_time = 0.0;
-      burned_cell_per_time = 0.0;
+#ifdef BENCHMARKING
+    double start_time, burned_cell_per_time, time_elapsed;
+    start_time = 0.0;
+    burned_cell_per_time = 0.0;
 
-      start_time = wtime();
-    #endif
+    start_time = wtime();
+#endif
 
     // Loop over burning cells in the cycle
 
@@ -150,13 +155,16 @@ Fire simulate_fire(
       } // end loop over neighbors_coords of burning cell b
 
     } // end loop over burning cells from this cycle
-    #ifdef BENCHMARKING
-      time_elapsed = wtime() - start_time;
-      burned_cell_per_time = burning_size / time_elapsed;
-      std::cout.precision(17);
-      std::cout << burned_cell_per_time << "," << burning_size << "," << time_elapsed
-                << std::endl;
-    #endif
+#ifdef BENCHMARKING
+    time_elapsed = wtime() - start_time;
+    burned_cell_per_time = burning_size / time_elapsed;
+    std::cout.precision(17);
+    std::cout << burned_cell_per_time << "," << burning_size << "," << time_elapsed
+              << std::endl;
+#endif
+#ifdef GRAPHICS
+    burned_ids_steps.push_back(end_forward);
+#endif
     // update start and end
     start = end;
     end = end_forward;
@@ -164,7 +172,13 @@ Fire simulate_fire(
 
   } // end while
 
-  return Fire(n_col, n_row, burned_bin, burned_ids);
+  Fire fire(n_col, n_row, burned_bin, burned_ids);
+
+#ifdef GRAPHICS
+  fire.burned_ids_steps = burned_ids_steps;
+#endif
+
+  return fire;
 }
 
 SimulationParams random_params() {
