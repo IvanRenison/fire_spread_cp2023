@@ -24,6 +24,8 @@ for compiler in compilers:
             string += compile_sh(compiler, flag, march_option)
             for landscape_path in landscapes_paths_prefix:
                 landscape_name = landscape_path.split('/')[-1]
-                string += f' && ./a.out {landscape_path} {n_particles} {m_same_particles} >> {compiler}_{flag}{march_option}_{landscape_name}.csv'
-
+                flags_for_file = (flag + march_option).replace(' ', '')
+                string += f' && ./a.out {landscape_path} {n_particles} {m_same_particles} >> {compiler}_{flags_for_file}_{landscape_name}.csv'
+string+='&& mv *.csv ../benchmarks/csv;'
 subprocess.run(string, shell=True)
+
