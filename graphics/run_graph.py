@@ -1,11 +1,12 @@
 from datetime import datetime
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 from typing import List, Tuple
 
-def animate_fire(width: int, height: int, steps: List[List[Tuple[int, int]]]):
+def animate_fire(width: int, height: int, steps: List[List[Tuple[int, int]]]) -> animation.ArtistAnimation:
     """
     Animates the fire spread
     Each element of steps is a list of coordinates of burning cells in that step
@@ -39,7 +40,7 @@ def animate_fire(width: int, height: int, steps: List[List[Tuple[int, int]]]):
         images.append([im])
 
     anim = animation.ArtistAnimation(fig, images)
-    anim.save('fire.mp4', fps=5)
+    return anim
 
 
 def read_fire() -> Tuple[int, int, List[List[Tuple[int, int]]]]:
@@ -76,8 +77,13 @@ def read_fire() -> Tuple[int, int, List[List[Tuple[int, int]]]]:
 
 
 def main():
+    # Get command line arguement
+    output_filename: str = "fire.mp4"
+    if len(sys.argv) > 1:
+        output_filename = sys.argv[1]
     width, height, steps = read_fire()
-    animate_fire(width, height, steps)
+    anim = animate_fire(width, height, steps)
+    anim.save(output_filename, fps=5)
 
 
 if __name__ == "__main__":
