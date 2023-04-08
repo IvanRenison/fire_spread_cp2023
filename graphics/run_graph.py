@@ -20,27 +20,25 @@ def animate_fire(width: int, height: int, steps: List[List[Tuple[int, int]]]):
         for x, y in step:
             burned_cells_steps[x, y] = i
 
-
     fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    ax.set_xlim(0, width)
-    ax.set_ylim(0, height)
-    ax.set_aspect('equal')
-    ax.set_xticks([])
-    ax.set_yticks([])
-
-    def animate(i):
-        ax.set_title(f"Step {i}")
+    images = []
+    for i in range(len(steps) + 1):
+        burned_cells: np.ndarray =  np.zeros((width, height, 3))
         for x in range(width):
             for y in range(height):
                 if burned_cells_steps[x, y] == -1 or burned_cells_steps[x, y] > i:
-                    ax.add_patch(plt.Rectangle((x, y), 1, 1, fc='g'))
+                    # Color green in rgb
+                    burned_cells[x, y] = [0, 1, 0]
                 elif burned_cells_steps[x, y] < i:
-                    ax.add_patch(plt.Rectangle((x, y), 1, 1, fc='k'))
+                    # Color black in rgb
+                    burned_cells[x, y] = [0, 0, 0]
                 elif burned_cells_steps[x, y] == i:
-                    ax.add_patch(plt.Rectangle((x, y), 1, 1, fc='r'))
+                    # Color red in rgb
+                    burned_cells[x, y] = [1, 0, 0]
+        im = plt.imshow(burned_cells)
+        images.append([im])
 
-    anim = animation.FuncAnimation(fig, animate, frames=len(steps))
+    anim = animation.ArtistAnimation(fig, images)
     anim.save('fire.mp4', fps=5)
 
 
