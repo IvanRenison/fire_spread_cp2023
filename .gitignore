@@ -13,5 +13,5 @@ src/test/test
 benchmarks/benchmark_simulate_fire
 benchmarks/benchmark_emulate_loglik
 
-graphics/graph_data
-graphics/fire.mp4
+graphics/fire_animation_data
+graphics/*.mp4
