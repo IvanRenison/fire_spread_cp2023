@@ -33,10 +33,10 @@ do
   echo $(echo $benchmark | sed 's/\.\///g')
   echo ""
 
-  for compilation in with_object_files without_object_files
+  for compilation in without_object_files
   do
 
-    for opt_level in 0 1 2 3 s z fast
+    for opt_level in fast
     do
       $compilation g++-12 $benchmark_cpp $benchmark $opt_level
       echo "g++ $compilation and -O$opt_level"
