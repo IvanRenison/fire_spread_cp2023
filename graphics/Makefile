@@ -13,7 +13,7 @@ fire_animation_data: $(files) $(headers) fire_animation_data.cpp
 	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) -I../src -DGRAPHICS fire_animation_data.cpp $(files) -o fire_animation_data
 
 burned_probabilities_data: $(files) $(headers) burned_probabilities_data.cpp
-	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) -I../src -DGRAPHICS burned_probabilities_data.cpp $(files) -o burned_probabilities_data
+	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) -I../src burned_probabilities_data.cpp $(files) -o burned_probabilities_data
 
 clean:
 	rm -f fire_animation_data burned_probabilities_data

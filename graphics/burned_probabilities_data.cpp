@@ -1,7 +1,3 @@
-#ifndef GRAPHICS
-#define GRAPHICS
-#endif
-
 #include "ignition_cells.hpp"
 #include "landscape.hpp"
 #include "many_simulations.hpp"
