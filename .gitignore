@@ -14,4 +14,6 @@ benchmarks/benchmark_simulate_fire
 benchmarks/benchmark_emulate_loglik
 
 graphics/fire_animation_data
+graphics/burned_probabilities_data
 graphics/*.mp4
+graphics/*.png
