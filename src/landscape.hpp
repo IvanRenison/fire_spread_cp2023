@@ -19,12 +19,12 @@ enum VegetationType {
 static_assert( sizeof(VegetationType) == 1 );
 
 typedef struct _s_Cell {
-  double elevation;
-  double wind_direction;
+  float elevation;
+  float wind_direction;
   bool burnable;
   VegetationType vegetation_type;
-  double fwi;
-  double aspect;
+  float fwi;
+  float aspect;
 } Cell;
 
 class Landscape {

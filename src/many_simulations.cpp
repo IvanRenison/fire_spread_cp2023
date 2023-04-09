@@ -4,7 +4,7 @@
 #include <cmath>
 
 compare_result compare_fires(
-    Fire fire1, FireStats fire1stats, Fire fire2, FireStats fire2stats, double lscale
+    Fire fire1, FireStats fire1stats, Fire fire2, FireStats fire2stats, float lscale
 ) {
 
   assert(fire1.width == fire2.width && fire1.height == fire2.height);
@@ -17,8 +17,8 @@ compare_result compare_fires(
   std::vector<std::pair<uint, uint>> burned_ids1 = fire1.burned_ids;
   std::vector<std::pair<uint, uint>> burned_ids2 = fire2.burned_ids;
 
-  double size1 = burned_ids1.size();
-  double size2 = burned_ids2.size();
+  float size1 = burned_ids1.size();
+  float size2 = burned_ids2.size();
 
   uint common = 0;
   // compute common pixels only in the smaller fire
@@ -32,70 +32,70 @@ compare_result compare_fires(
     }
   }
 
-  double overlap_sp = (double)common / (double)(size1 + size2 - common);
+  float overlap_sp = (float)common / (float)(size1 + size2 - common);
 
   // overlap_vd -----------------------------------------------------------
   // compute vegetation distribution overlap
-  double overlap_vd = 0.0;
+  float overlap_vd = 0.0;
   overlap_vd += std::min(
-      (double)fire1stats.counts_veg_matorral / (double)size1,
-      (double)fire2stats.counts_veg_matorral / (double)size2
+      (float)fire1stats.counts_veg_matorral / (float)size1,
+      (float)fire2stats.counts_veg_matorral / (float)size2
   );
   overlap_vd += std::min(
-      (double)fire1stats.counts_veg_subalpine / (double)size1,
-      (double)fire2stats.counts_veg_subalpine / (double)size2
+      (float)fire1stats.counts_veg_subalpine / (float)size1,
+      (float)fire2stats.counts_veg_subalpine / (float)size2
   );
   overlap_vd += std::min(
-      (double)fire1stats.counts_veg_wet / (double)size1,
-      (double)fire2stats.counts_veg_wet / (double)size2
+      (float)fire1stats.counts_veg_wet / (float)size1,
+      (float)fire2stats.counts_veg_wet / (float)size2
   );
   overlap_vd += std::min(
-      (double)fire1stats.counts_veg_dry / (double)size1,
-      (double)fire2stats.counts_veg_dry / (double)size2
+      (float)fire1stats.counts_veg_dry / (float)size1,
+      (float)fire2stats.counts_veg_dry / (float)size2
   );
 
   // deltas by veg_type ---------------------------------------------------
 
   // normalized difference using absolute difference. The difference by veg_type
   // is in [0, 1]. So, if we divide delta_norm by 4 (veg_num), it will be in [0, 1].
-  double delta_norm = 0.0;
+  float delta_norm = 0.0;
 
-  double sum_area_matorral =
-      ((double)fire1stats.counts_veg_matorral + (double)fire2stats.counts_veg_matorral);
+  float sum_area_matorral =
+      ((float)fire1stats.counts_veg_matorral + (float)fire2stats.counts_veg_matorral);
   if (sum_area_matorral > 0.0) {
     delta_norm += std::abs(
-        ((double)fire1stats.counts_veg_matorral - (double)fire2stats.counts_veg_matorral) /
+        ((float)fire1stats.counts_veg_matorral - (float)fire2stats.counts_veg_matorral) /
         sum_area_matorral
     );
   }
-  double sum_area_subalpine =
-      ((double)fire1stats.counts_veg_subalpine + (double)fire2stats.counts_veg_subalpine);
+  float sum_area_subalpine =
+      ((float)fire1stats.counts_veg_subalpine + (float)fire2stats.counts_veg_subalpine);
   if (sum_area_subalpine > 0.0) {
     delta_norm += std::abs(
-        ((double)fire1stats.counts_veg_subalpine - (double)fire2stats.counts_veg_subalpine) /
+        ((float)fire1stats.counts_veg_subalpine - (float)fire2stats.counts_veg_subalpine) /
         sum_area_subalpine
     );
   }
-  double sum_area_wet = ((double)fire1stats.counts_veg_wet + (double)fire2stats.counts_veg_wet);
+  float sum_area_wet = ((float)fire1stats.counts_veg_wet + (float)fire2stats.counts_veg_wet);
   if (sum_area_wet > 0.0) {
     delta_norm += std::abs(
-        ((double)fire1stats.counts_veg_wet - (double)fire2stats.counts_veg_wet) / sum_area_wet
+        ((float)fire1stats.counts_veg_wet - (float)fire2stats.counts_veg_wet) / sum_area_wet
     );
   }
-  double sum_area_dry = ((double)fire1stats.counts_veg_dry + (double)fire2stats.counts_veg_dry);
+  float sum_area_dry = ((float)fire1stats.counts_veg_dry + (float)fire2stats.counts_veg_dry);
   if (sum_area_dry > 0.0) {
     delta_norm += std::abs(
-        ((double)fire1stats.counts_veg_dry - (double)fire2stats.counts_veg_dry) / sum_area_dry
+        ((float)fire1stats.counts_veg_dry - (float)fire2stats.counts_veg_dry) / sum_area_dry
     );
   }
 
   // Scale to [0, 1]
-  double delta_norm_unit = delta_norm / 4;
+  float delta_norm_unit = delta_norm / 4;
 
   // Transform to similarities
-  double overlap_norm = 1.0 - delta_norm_unit;
-  double overlap_expquad = exp(-pow(delta_norm_unit, 2.0) / lscale); // 0.2 is the Gaussian SD.
-  double overlap_quad = 1 - pow(delta_norm_unit, 2.0);
+  float overlap_norm = 1.0 - delta_norm_unit;
+  float overlap_expquad = exp(-pow(delta_norm_unit, 2.0) / lscale); // 0.2 is the Gaussian SD.
+  float overlap_quad = 1 - pow(delta_norm_unit, 2.0);
 
   // ---------------------------------------------------------------------
 
@@ -108,12 +108,12 @@ compare_result compare_fires(
                              .overlap_quad = overlap_quad,
 
                              // mixture indices
-                             .sp_norm_5050 = (0.50 * overlap_sp + 0.50 * overlap_norm),
-                             .sp_norm_7525 = (0.75 * overlap_sp + 0.25 * overlap_norm),
-                             .sp_expquad_5050 = (0.50 * overlap_sp + 0.50 * overlap_expquad),
-                             .sp_expquad_7525 = (0.75 * overlap_sp + 0.25 * overlap_expquad),
-                             .sp_quad_5050 = (0.50 * overlap_sp + 0.50 * overlap_quad),
-                             .sp_quad_7525 = (0.75 * overlap_sp + 0.25 * overlap_quad)
+                             .sp_norm_5050 = (0.50f * overlap_sp + 0.50f * overlap_norm),
+                             .sp_norm_7525 = (0.75f * overlap_sp + 0.25f * overlap_norm),
+                             .sp_expquad_5050 = (0.50f * overlap_sp + 0.50f * overlap_expquad),
+                             .sp_expquad_7525 = (0.75f * overlap_sp + 0.25f * overlap_expquad),
+                             .sp_quad_5050 = (0.50f * overlap_sp + 0.50f * overlap_quad),
+                             .sp_quad_7525 = (0.75f * overlap_sp + 0.25f * overlap_quad)
   };
 
   return indexes;
@@ -121,8 +121,8 @@ compare_result compare_fires(
 
 std::vector<compare_result> emulate_loglik_particle(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, double distance, double elevation_mean, double elevation_sd,
-    double upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates
+    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates
 ) {
 
   std::vector<compare_result> similarity(n_replicates);
@@ -143,8 +143,8 @@ std::vector<compare_result> emulate_loglik_particle(
 
 std::vector<std::vector<compare_result>> emulate_loglik(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    std::vector<SimulationParams> particles, double distance, double elevation_mean,
-    double elevation_sd, double upper_limit, Fire fire_ref, FireStats fire_ref_stats,
+    std::vector<SimulationParams> particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
     int n_replicates
 ) {
 
@@ -164,8 +164,8 @@ std::vector<std::vector<compare_result>> emulate_loglik(
 
 Matrix<uint> burned_amounts_per_cell(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, double distance, double elevation_mean, double elevation_sd,
-    double upper_limit, uint n_replicates
+    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    float upper_limit, uint n_replicates
 ) {
 
   Matrix<uint> burned_amounts(landscape.width, landscape.height);
