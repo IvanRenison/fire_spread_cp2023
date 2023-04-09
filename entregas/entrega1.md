@@ -1,18 +1,17 @@
 # Entrega 1
 
-## Metrica
+## Métrica
 
-Debido a que lo que buscamos es mejorar la performance de una simulación decidimos tomar como metrica el tiempo que nos lleva correr un paso de la simulación, y ademas para poder normalizar los resultados para diferentes tamaños de ladscapes y fuegos lo dividimos por la cantidad de celdas que se estan activamente quemando en el paso actual.
+Debido a que lo que buscamos es mejorar la performance de una simulación decidimos tomar como métrica el tiempo que nos lleva correr un paso de la simulación, y además para poder normalizar los resultados para diferentes tamaños de landscapes y fuegos lo dividimos por la cantidad de celdas que se están activamente quemando en el paso actual.
 
-Todos los graficos que presentaremos tendran `burned cells per second` como metrica principal, corriendo la simulación con 30 particulas aleatorias y corriendolas 2 veces para cada particula.
+Todos los gráficos que presentaremos tendrán `burned cells per second` como métrica principal, corriendo la simulación con 30 partículas aleatorias y 2 veces para cada una de estas.
 
 ## Ambiente
 
 Todos los benchmarks fueron corridos en atom.
 
-### CPU
-
-`AMD EPYC 7643 48-Core Processor`
+* `AMD EPYC 7643 48-Core Processor`
+* `128 GB de RAM`
 
 ### Compiladores
 
@@ -21,16 +20,16 @@ Todos los benchmarks fueron corridos en atom.
 
 ### Landscapes
 
- -  | nombre   | tamaño (x,y)
-  ----- | -------- | --------
-Grande: | 2021_865 |(1961,2395)
-Mediano:| 1999_25j |(366,344)
-Chico:  | 2013_12  |(45,51)
+| -      | nombre   | tamaño (x,y)|
+|  ----- | -------- | --------    |
+|Grande: | 2021_865 |(1961,2395)  |
+|Mediano:| 1999_25j |(366,344)    |
+|Chico:  | 2013_12  |(45,51)      |
 
 ## Benchmarks
 
-Las barras de errores es la desciación estandar, las barras son la media de las mediciones.
-benchmarks/benchmark.py
+Las barras de errores es la desviación estándar, las barras son la media de las mediciones.
+
 ### -O 0 1 2 3 fast
 
 <img src="https://drive.google.com/uc?id=1hV0CM_-jO92bBlygKUHFneIFvAfA-d0_">
@@ -39,7 +38,7 @@ benchmarks/benchmark.py
 
 <img src="https://drive.google.com/uc?id=1SXoIipC21efhGkvNvg__DuMBnOv-V-5D">
 
--Ofast es la más rapida, y sus optimizaciones producen margenes de errores aceptables.
+-Ofast es la más rápida, y sus optimizaciones producen márgenes de error aceptables.
 
 En general clang esta bastante a la par de g++ de no ser por -Ofast donde las optimizaciones de g++ son más agresivas, resultando en mejor performance
 
@@ -67,6 +66,10 @@ Probamos todas estas flags combinadas con -Ofast
 
 <img src="https://drive.google.com/uc?id=1fQPkXEA0uYQ95H3OlVCxcJ9LrYDCM4ly">
 
-### Conclusion
+### Conclusión
 
 La mejor combinación para nuestro proyecto es usar g++ con -Ofast -march=native -flto
+
+
+### Memory leak
+
