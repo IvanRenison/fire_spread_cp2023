@@ -34,9 +34,15 @@ Landscape::Landscape(std::string filename_prefix) {
     if (loop_csv == CSVIterator() || (*loop_csv).size() < 8) {
       throw std::runtime_error("Invalid landscape file");
     }
-    cells[i].subalpine = atoi((*loop_csv)[0].data());
-    cells[i].wet = atoi((*loop_csv)[1].data());
-    cells[i].dry = atoi((*loop_csv)[2].data());
+    if (atoi((*loop_csv)[0].data()) == 1) {
+      cells[i].vegetation_type = SUBALPINE;
+    } else if (atoi((*loop_csv)[1].data()) == 1) {
+      cells[i].vegetation_type = WET;
+    } else if (atoi((*loop_csv)[2].data()) == 1) {
+      cells[i].vegetation_type = DRY;
+    } else {
+      cells[i].vegetation_type = MATORRAL;
+    }
     cells[i].fwi = atof((*loop_csv)[3].data());
     cells[i].aspect = atof((*loop_csv)[4].data());
     cells[i].wind_direction = atof((*loop_csv)[5].data());
@@ -54,15 +60,17 @@ Cell& Landscape::operator[](size_t index1, size_t index2) {
 }
 
 void Landscape::print_csv() const {
-  std::cout << "\"subalpine\",\"wet\",\"dry\",\"fwi\",\"aspect\",\"wind\",\"elevation\",\"burnable\""
-            << std::endl;
+  std::cout
+      << "\"subalpine\",\"wet\",\"dry\",\"fwi\",\"aspect\",\"wind\",\"elevation\",\"burnable\""
+      << std::endl;
   for (uint i = 0; i < width; i++) {
     for (uint j = 0; j < height; j++) {
-      std::cout << cells[i * width + j].subalpine << "," << cells[i * width + j].wet << ","
-                << cells[i * width + j].dry << "," << cells[i * width + j].fwi << ","
-                << cells[i * width + j].aspect << "," << cells[i * width + j].wind_direction << ","
-                << cells[i * width + j].elevation << "," << cells[i * width + j].burnable
-                << std::endl;
+      std::cout << (cells[i * width + j].vegetation_type == SUBALPINE) << ","
+                << (cells[i * width + j].vegetation_type == WET) << ","
+                << (cells[i * width + j].vegetation_type == DRY) << ","
+                << cells[i * width + j].fwi << "," << cells[i * width + j].aspect << ","
+                << cells[i * width + j].wind_direction << "," << cells[i * width + j].elevation
+                << "," << cells[i * width + j].burnable << std::endl;
     }
   }
 }

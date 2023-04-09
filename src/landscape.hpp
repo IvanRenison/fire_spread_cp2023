@@ -1,22 +1,28 @@
 #ifndef _LANDSCAPE_HPP
 #define _LANDSCAPE_HPP
 
+#include <cassert>
 #include <cstddef>
 #include <string>
 
 #include "csv.hpp"
 #include "types.h"
 
+// enum of vegetation type between: matorral, subalpine, wet, dry
+enum VegetationType {
+  MATORRAL,
+  SUBALPINE,
+  WET,
+  DRY
+} __attribute__((packed));
+
+static_assert( sizeof(VegetationType) == 1 );
+
 typedef struct _s_Cell {
   double elevation;
   double wind_direction;
   bool burnable;
-  // There are 4 types of vegetation: matorral, subalpine, wet, dry
-  // bools subalpine, wet and dry are exclusive, and when the three are false,
-  // the vegetation is matorral
-  bool subalpine;
-  bool wet;
-  bool dry;
+  VegetationType vegetation_type;
   double fwi;
   double aspect;
 } Cell;

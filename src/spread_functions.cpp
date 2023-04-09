@@ -23,9 +23,13 @@ double spread_probability(
 
   double linpred = params.independent_pred;
 
-  linpred += params.subalpine_pred * neighbour->subalpine;
-  linpred += params.wet_pred * neighbour->wet;
-  linpred += params.dry_pred * neighbour->dry;
+  if (neighbour->vegetation_type == SUBALPINE) {
+    linpred += params.subalpine_pred;
+  } else if (neighbour->vegetation_type == WET) {
+    linpred += params.wet_pred;
+  } else if (neighbour->vegetation_type == DRY) {
+    linpred += params.dry_pred;
+  }
 
   linpred += params.fwi_pred * neighbour->fwi;
   linpred += params.aspect_pred * neighbour->aspect;
