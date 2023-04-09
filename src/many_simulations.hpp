@@ -49,4 +49,10 @@ std::vector<std::vector<compare_result>> emulate_loglik(
     int n_replicates = 10
 );
 
+Matrix<uint> burned_amounts_per_cell(
+    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
+    SimulationParams params, double distance, double elevation_mean, double elevation_sd,
+    double upper_limit, uint n_replicates
+);
+
 #endif

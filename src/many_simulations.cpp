@@ -161,3 +161,28 @@ std::vector<std::vector<compare_result>> emulate_loglik(
 
   return similarity;
 }
+
+Matrix<uint> burned_amounts_per_cell(
+    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
+    SimulationParams params, double distance, double elevation_mean, double elevation_sd,
+    double upper_limit, uint n_replicates
+) {
+
+  Matrix<uint> burned_amounts(landscape.width, landscape.height);
+
+  for (uint i = 0; i < n_replicates; i++) {
+    Fire fire = simulate_fire(
+        landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit
+    );
+
+    for (uint row = 0; row < landscape.width; row++) {
+      for (uint col = 0; col < landscape.height; col++) {
+        if (fire.burned_layer[row, col]) {
+          burned_amounts[row, col] += 1;
+        }
+      }
+    }
+  }
+
+  return burned_amounts;
+}
