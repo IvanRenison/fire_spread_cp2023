@@ -33,9 +33,6 @@ def read_burned_amounts() -> Tuple[int, np.ndarray]:
 def draw_burned_probabilities(simulations: int, burned_amounts: np.ndarray, output_filename: str):
     """
     Generates a plot of the burned probabilities
-    Colors:
-    - Red: 100% probability
-    - Green: 0% probability
     """
     burned_probabilities: np.ndarray = burned_amounts / simulations
     im = plt.imshow(burned_probabilities)
