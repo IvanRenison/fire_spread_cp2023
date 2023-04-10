@@ -81,7 +81,7 @@ Fire simulate_fire(
     int end_forward = end;
 
 #ifdef BENCHMARKING
-    float start_time, burned_cell_per_time, time_elapsed;
+    double start_time, burned_cell_per_time, time_elapsed;
     start_time = 0.0;
     burned_cell_per_time = 0.0;
 
