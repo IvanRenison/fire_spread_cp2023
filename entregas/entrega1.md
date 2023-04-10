@@ -20,11 +20,11 @@ Todos los benchmarks fueron corridos en atom.
 
 ### Landscapes
 
-| -      | nombre   | tamaño (x,y)|
-|  ----- | -------- | --------    |
-|Grande: | 2021_865 |(1961,2395)  |
-|Mediano:| 1999_25j |(366,344)    |
-|Chico:  | 2013_12  |(45,51)      |
+| -        | nombre   | tamaño (x,y) |
+| -------- | -------- | ------------ |
+| Grande:  | 2021_865 | (1961,2395)  |
+| Mediano: | 1999_25j | (366,344)    |
+| Chico:   | 2013_12  | (45,51)      |
 
 ## Benchmarks
 
@@ -70,6 +70,4 @@ Probamos todas estas flags combinadas con -Ofast
 
 La mejor combinación para nuestro proyecto es usar g++ con -Ofast -march=native -flto
 
-
-### Memory leak
 
