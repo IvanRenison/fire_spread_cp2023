@@ -43,11 +43,11 @@ FireStats get_fire_stats(Fire fire, Landscape landscape) {
 
     Cell cell = landscape[x, y];
 
-    if (cell.subalpine) {
+    if (cell.vegetation_type == SUBALPINE) {
       stats.counts_veg_subalpine++;
-    } else if (cell.wet) {
+    } else if (cell.vegetation_type == WET) {
       stats.counts_veg_wet++;
-    } else if (cell.dry) {
+    } else if (cell.vegetation_type == DRY) {
       stats.counts_veg_dry++;
     } else {
       stats.counts_veg_matorral++;
