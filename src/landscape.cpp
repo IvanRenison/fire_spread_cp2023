@@ -32,8 +32,8 @@ Landscape::Landscape(std::string filename_prefix) : cells(0, 0) {
   CSVIterator loop_csv(landscape_file);
   ++loop_csv;
 
-  for (uint i = 0; i < width; i++) {
-    for (uint j = 0; j < height; j++, ++loop_csv) {
+  for (uint j = 0; j < height; j++) {
+    for (uint i = 0; i < width; i++, ++loop_csv) {
       if (loop_csv == CSVIterator() || (*loop_csv).size() < 8) {
         throw std::runtime_error("Invalid landscape file");
       }
@@ -67,8 +67,8 @@ void Landscape::print_csv() const {
   std::cout
       << "\"subalpine\",\"wet\",\"dry\",\"fwi\",\"aspect\",\"wind\",\"elevation\",\"burnable\""
       << std::endl;
-  for (uint i = 0; i < width; i++) {
-    for (uint j = 0; j < height; j++) {
+  for (uint j = 0; j < height; j++) {
+    for (uint i = 0; i < width; i++) {
       std::cout << (cells[i, j].vegetation_type == SUBALPINE) << ","
                 << (cells[i, j].vegetation_type == WET) << ","
                 << (cells[i, j].vegetation_type == DRY) << "," << cells[i, j].fwi << ","
