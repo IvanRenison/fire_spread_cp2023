@@ -37,9 +37,15 @@ Landscape::Landscape(std::string filename_prefix) : cells(0, 0) {
       if (loop_csv == CSVIterator() || (*loop_csv).size() < 8) {
         throw std::runtime_error("Invalid landscape file");
       }
-      cells[i, j].subalpine = atoi((*loop_csv)[0].data());
-      cells[i, j].wet = atoi((*loop_csv)[1].data());
-      cells[i, j].dry = atoi((*loop_csv)[2].data());
+      if (atoi((*loop_csv)[0].data()) == 1) {
+        cells[i, j].vegetation_type = SUBALPINE;
+      } else if (atoi((*loop_csv)[1].data()) == 1) {
+        cells[i, j].vegetation_type = WET;
+      } else if (atoi((*loop_csv)[2].data()) == 1) {
+        cells[i, j].vegetation_type = DRY;
+      } else {
+        cells[i, j].vegetation_type = MATORRAL;
+      }
       cells[i, j].fwi = atof((*loop_csv)[3].data());
       cells[i, j].aspect = atof((*loop_csv)[4].data());
       cells[i, j].wind_direction = atof((*loop_csv)[5].data());
@@ -58,15 +64,16 @@ Cell& Landscape::operator[](size_t index1, size_t index2) {
 }
 
 void Landscape::print_csv() const {
-  std::cout << "\"subalpine\",\"wet\",\"dry\",\"fwi\",\"aspect\",\"wind\",\"elevation\",\"burnable\""
-            << std::endl;
+  std::cout
+      << "\"subalpine\",\"wet\",\"dry\",\"fwi\",\"aspect\",\"wind\",\"elevation\",\"burnable\""
+      << std::endl;
   for (uint i = 0; i < width; i++) {
     for (uint j = 0; j < height; j++) {
-      std::cout << cells[i, j].subalpine << "," << cells[i, j].wet << ","
-                << cells[i, j].dry << "," << cells[i, j].fwi << ","
+      std::cout << (cells[i, j].vegetation_type == SUBALPINE) << ","
+                << (cells[i, j].vegetation_type == WET) << ","
+                << (cells[i, j].vegetation_type == DRY) << "," << cells[i, j].fwi << ","
                 << cells[i, j].aspect << "," << cells[i, j].wind_direction << ","
-                << cells[i, j].elevation << "," << cells[i, j].burnable
-                << std::endl;
+                << cells[i, j].elevation << "," << cells[i, j].burnable << std::endl;
     }
   }
 }
