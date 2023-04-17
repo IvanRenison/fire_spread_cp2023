@@ -65,12 +65,12 @@ void Landscape::print_csv() const {
       << std::endl;
   for (uint i = 0; i < width; i++) {
     for (uint j = 0; j < height; j++) {
-      std::cout << (cells[i * width + j].vegetation_type == SUBALPINE) << ","
-                << (cells[i * width + j].vegetation_type == WET) << ","
-                << (cells[i * width + j].vegetation_type == DRY) << ","
-                << cells[i * width + j].fwi << "," << cells[i * width + j].aspect << ","
-                << cells[i * width + j].wind_direction << "," << cells[i * width + j].elevation
-                << "," << cells[i * width + j].burnable << std::endl;
+      std::cout << (cells[j * width + i].vegetation_type == SUBALPINE) << ","
+                << (cells[j * width + i].vegetation_type == WET) << ","
+                << (cells[j * width + i].vegetation_type == DRY) << ","
+                << cells[j * width + i].fwi << "," << cells[j * width + i].aspect << ","
+                << cells[j * width + i].wind_direction << "," << cells[j * width + i].elevation
+                << "," << cells[j * width + i].burnable << std::endl;
     }
   }
 }
