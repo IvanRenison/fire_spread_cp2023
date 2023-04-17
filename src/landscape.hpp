@@ -6,6 +6,8 @@
 #include <string>
 
 #include "csv.hpp"
+#include "matrix.hpp"
+
 #include "types.h"
 
 // enum of vegetation type between: matorral, subalpine, wet, dry
@@ -41,7 +43,7 @@ public:
   void print_csv() const;
 
 private:
-  std::vector<Cell> cells;
+  Matrix<Cell> cells;
 };
 
 #endif
