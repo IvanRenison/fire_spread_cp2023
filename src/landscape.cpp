@@ -56,11 +56,11 @@ Landscape::Landscape(std::string filename_prefix) : cells(0, 0) {
 }
 
 Cell Landscape::operator[](size_t index1, size_t index2) const {
-  return cells[index2, index1];
+  return cells[index1, index2];
 }
 
 Cell& Landscape::operator[](size_t index1, size_t index2) {
-  return cells[index2, index1];
+  return cells[index1, index2];
 }
 
 void Landscape::print_csv() const {
