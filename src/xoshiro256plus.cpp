@@ -40,7 +40,7 @@ static inline uint64_t rotl(const uint64_t x, int k) {
 
 static uint64_t s[4] = {next_splitmix64(), next_splitmix64(), next_splitmix64(), next_splitmix64()};
 
-float next(void) {
+uint64_t next(void) {
 	const uint64_t result = s[0] + s[3];
 
 	const uint64_t t = s[1] << 17;
@@ -54,7 +54,7 @@ float next(void) {
 
 	s[3] = rotl(s[3], 45);
 
-	return result/UINT64_MAX;
+	return result;
 }
 
 
@@ -69,7 +69,7 @@ void jump(void) {
 	uint64_t s1 = 0;
 	uint64_t s2 = 0;
 	uint64_t s3 = 0;
-	for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
+	for(uint64_t i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
 		for(int b = 0; b < 64; b++) {
 			if (JUMP[i] & UINT64_C(1) << b) {
 				s0 ^= s[0];
@@ -99,7 +99,7 @@ void long_jump(void) {
 	uint64_t s1 = 0;
 	uint64_t s2 = 0;
 	uint64_t s3 = 0;
-	for(int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
+	for(uint64_t i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
 		for(int b = 0; b < 64; b++) {
 			if (LONG_JUMP[i] & UINT64_C(1) << b) {
 				s0 ^= s[0];

@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-float next(void);
+uint64_t next(void);
 
 #endif

@@ -145,7 +145,7 @@ Fire simulate_fire(
 
         // Burn with probability prob (Bernoulli)
 
-	bool burn = next() < prob;
+	bool burn = ((float)next()/UINT64_MAX) < prob;
 
         if (burn == 0)
           continue;
