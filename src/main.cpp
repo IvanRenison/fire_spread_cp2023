@@ -5,7 +5,6 @@
 #include "many_simulations.hpp"
 #include "spread_functions.hpp"
 
-#define SEED 10
 #define DISTANCE 30
 #define ELEVATION_MEAN 1163.3
 #define ELEVATION_SD 399.5
@@ -33,8 +32,6 @@ int main(int argc, char* argv[]) {
     IgnitionCells ignition_cells =
         read_ignition_cells(landscape_file_prefix + "-ignition_points.csv");
 
-    // Set seed
-    std::srand(SEED);
 
     // read de fire
     Fire fire(landscape.width, landscape.height, landscape_file_prefix);

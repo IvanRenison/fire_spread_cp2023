@@ -1,6 +1,8 @@
 #include "spread_functions.hpp"
 
 #define _USE_MATH_DEFINES
+#define SEED 10
+
 #include <cmath>
 #include <random>
 #include <vector>
@@ -17,8 +19,8 @@ float spread_probability(
     float elevation_mean, float elevation_sd, float upper_limit = 1.0
 ) {
 
-  float slope_term = sin(atan((neighbour->elevation - burning->elevation) / distance));
-  float wind_term = cos(angle - burning->wind_direction);
+  float slope_term = sinf(atanf((neighbour->elevation - burning->elevation) / distance));
+  float wind_term = cosf(angle - burning->wind_direction);
   float elev_term = (neighbour->elevation - elevation_mean) / elevation_sd;
 
   float linpred = params.independent_pred;
@@ -47,6 +49,8 @@ Fire simulate_fire(
     SimulationParams params, float distance, float elevation_mean, float elevation_sd,
     float upper_limit = 1.0
 ) {
+  
+  std::mt19937 rng(SEED);
 
   uint n_row = landscape.height;
   uint n_col = landscape.width;
@@ -143,7 +147,9 @@ Fire simulate_fire(
         );
 
         // Burn with probability prob (Bernoulli)
-        bool burn = (float)rand() / (float)RAND_MAX < prob;
+        std::bernoulli_distribution d(prob);
+
+	bool burn = d(rng);
 
         if (burn == 0)
           continue;
