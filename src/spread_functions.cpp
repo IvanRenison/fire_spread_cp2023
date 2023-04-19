@@ -1,14 +1,13 @@
 #include "spread_functions.hpp"
 
 #define _USE_MATH_DEFINES
-#define SEED 10
 
 #include <cmath>
-#include <random>
 #include <vector>
 
 #include "fires.hpp"
 #include "landscape.hpp"
+#include "xoshiro256plus.hpp"
 
 #ifdef BENCHMARKING
 #include "wtime.hpp"
@@ -49,8 +48,6 @@ Fire simulate_fire(
     SimulationParams params, float distance, float elevation_mean, float elevation_sd,
     float upper_limit = 1.0
 ) {
-  
-  std::mt19937 rng(SEED);
 
   uint n_row = landscape.height;
   uint n_col = landscape.width;
@@ -147,9 +144,8 @@ Fire simulate_fire(
         );
 
         // Burn with probability prob (Bernoulli)
-        std::bernoulli_distribution d(prob);
 
-	bool burn = d(rng);
+	bool burn = next() < prob;
 
         if (burn == 0)
           continue;
