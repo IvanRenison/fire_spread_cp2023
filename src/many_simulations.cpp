@@ -144,7 +144,7 @@ std::vector<compare_result> emulate_loglik_particle(
 compare_result emulate_loglik_particle_average(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     SimulationParams params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates = 10
+    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates
 ) {
 
   std::vector<compare_result> similarity = emulate_loglik_particle(
@@ -208,7 +208,7 @@ std::vector<compare_result> emulate_loglik_average(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     std::vector<SimulationParams> particles, float distance, float elevation_mean,
     float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
-    int n_replicates = 10
+    int n_replicates
 ) {
 
   uint n_particles = particles.size();
@@ -221,6 +221,8 @@ std::vector<compare_result> emulate_loglik_average(
         upper_limit, fire_ref, fire_ref_stats, n_replicates
     );
   }
+
+  return similarity;
 }
 
 Matrix<uint> burned_amounts_per_cell(
