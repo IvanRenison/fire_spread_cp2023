@@ -141,6 +141,48 @@ std::vector<compare_result> emulate_loglik_particle(
   return similarity;
 }
 
+compare_result emulate_loglik_particle_average(
+    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
+    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates = 10
+) {
+
+  std::vector<compare_result> similarity = emulate_loglik_particle(
+      landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,
+      fire_ref, fire_ref_stats, n_replicates
+  );
+
+  compare_result average = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+
+  for (int i = 0; i < n_replicates; i++) {
+    average.overlap_sp += similarity[i].overlap_sp;
+    average.overlap_vd += similarity[i].overlap_vd;
+    average.overlap_norm += similarity[i].overlap_norm;
+    average.overlap_expquad += similarity[i].overlap_expquad;
+    average.overlap_quad += similarity[i].overlap_quad;
+    average.sp_norm_5050 += similarity[i].sp_norm_5050;
+    average.sp_norm_7525 += similarity[i].sp_norm_7525;
+    average.sp_expquad_5050 += similarity[i].sp_expquad_5050;
+    average.sp_expquad_7525 += similarity[i].sp_expquad_7525;
+    average.sp_quad_5050 += similarity[i].sp_quad_5050;
+    average.sp_quad_7525 += similarity[i].sp_quad_7525;
+  }
+
+  average.overlap_sp /= (float)n_replicates;
+  average.overlap_vd /= (float)n_replicates;
+  average.overlap_norm /= (float)n_replicates;
+  average.overlap_expquad /= (float)n_replicates;
+  average.overlap_quad /= (float)n_replicates;
+  average.sp_norm_5050 /= (float)n_replicates;
+  average.sp_norm_7525 /= (float)n_replicates;
+  average.sp_expquad_5050 /= (float)n_replicates;
+  average.sp_expquad_7525 /= (float)n_replicates;
+  average.sp_quad_5050 /= (float)n_replicates;
+  average.sp_quad_7525 /= (float)n_replicates;
+
+  return average;
+}
+
 std::vector<std::vector<compare_result>> emulate_loglik(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     std::vector<SimulationParams> particles, float distance, float elevation_mean,
@@ -160,6 +202,25 @@ std::vector<std::vector<compare_result>> emulate_loglik(
   }
 
   return similarity;
+}
+
+std::vector<compare_result> emulate_loglik_average(
+    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
+    std::vector<SimulationParams> particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
+    int n_replicates = 10
+) {
+
+  uint n_particles = particles.size();
+
+  std::vector<compare_result> similarity(n_particles);
+
+  for (uint part = 0; part < n_particles; part++) {
+    similarity[part] = emulate_loglik_particle_average(
+        landscape, ignition_cells, particles[part], distance, elevation_mean, elevation_sd,
+        upper_limit, fire_ref, fire_ref_stats, n_replicates
+    );
+  }
 }
 
 Matrix<uint> burned_amounts_per_cell(

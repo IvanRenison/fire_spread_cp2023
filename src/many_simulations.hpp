@@ -41,8 +41,23 @@ std::vector<compare_result> emulate_loglik_particle(
     float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates = 10
 );
 
+// The same function but averaging the results
+compare_result emulate_loglik_particle_average(
+    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
+    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates = 10
+);
+
 // The same function but evaluating many particles all at once
 std::vector<std::vector<compare_result>> emulate_loglik(
+    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
+    std::vector<SimulationParams> particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
+    int n_replicates = 10
+);
+
+// The same function but also averaging the results
+std::vector<compare_result> emulate_loglik_average(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     std::vector<SimulationParams> particles, float distance, float elevation_mean,
     float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
