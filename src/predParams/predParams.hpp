@@ -15,3 +15,10 @@ void emulate_one_loglik(
     float distance, float elevation_mean, float elevation_sd, float upper_limit,
     uint n_replicates = 10
 );
+
+// The same but for many files
+void emulate_many_logliks(
+    std::vector<std::string> files_prefixes, std::string output_folder,
+    std::vector<SimulationParams> particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, uint n_replicates = 10
+);

@@ -65,3 +65,16 @@ void emulate_one_loglik(
 
   out_file.close();
 }
+
+void emulate_many_logliks(
+    std::vector<std::string> files_prefixes, std::string output_folder,
+    std::vector<SimulationParams> particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, uint n_replicates
+) {
+  for (std::string filename_prefix : files_prefixes) {
+    emulate_one_loglik(
+        filename_prefix, output_folder, particles, distance, elevation_mean, elevation_sd,
+        upper_limit, n_replicates
+    );
+  }
+}
