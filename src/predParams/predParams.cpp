@@ -1,6 +1,7 @@
 #include "predParams.hpp"
 
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -72,9 +73,11 @@ void emulate_many_logliks(
     float elevation_sd, float upper_limit, uint n_replicates
 ) {
   for (std::string filename_prefix : files_prefixes) {
+    std::cout << "Emulating loglik for " << filename_prefix << std::endl;
     emulate_one_loglik(
         filename_prefix, output_folder, particles, distance, elevation_mean, elevation_sd,
         upper_limit, n_replicates
     );
+    std::cout << "Done" << std::endl;
   }
 }
