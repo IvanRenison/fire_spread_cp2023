@@ -18,12 +18,17 @@ void emulate_one_loglik(
 
   Landscape landscape(filename_prefix);
 
-  std::string output_filename = output_folder + "/" + filename_prefix + "_loglikResult.csv";
+  // get filename from filename_prefix without the path
+  std::string fire_name = filename_prefix.substr(filename_prefix.find_last_of("/") + 1);
+
+  std::string output_filename = output_folder + "/" + fire_name + "-loglikResult.csv";
   std::ifstream in_file(output_filename);
 
-  // Check that file was open correctly
   if (!in_file) {
-    throw std::runtime_error("Could not open file " + output_filename);
+    // File does not exist, create it
+    in_file.close();
+    std::ofstream out_file(output_filename);
+    out_file.close();
   }
 
   // Check that file is empty
@@ -37,7 +42,7 @@ void emulate_one_loglik(
   uint width = landscape.width;
   uint height = landscape.height;
 
-  IgnitionCells ignition_cells = read_ignition_cells(filename_prefix + "_ignition_cells.csv");
+  IgnitionCells ignition_cells = read_ignition_cells(filename_prefix + "-ignition_points.csv");
 
   Fire fire_ref(width, height, filename_prefix);
 

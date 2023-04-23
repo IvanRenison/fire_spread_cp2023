@@ -61,6 +61,8 @@ int main(int argc, char** argv) {
 
     std::vector<SimulationParams> particles = read_simulationParams_csv(particles_filename);
 
+    std::cout << particles.size() << " particles read" << std::endl;
+
     std::ifstream landscapes_file(landscapes_filename);
     std::vector<std::string> landscapes;
 
