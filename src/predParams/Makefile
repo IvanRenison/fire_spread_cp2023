@@ -9,9 +9,8 @@ headers = $(wildcard ../*.hpp)
 
 all: predParams
 
-predParams: $(files) $(headers) predParams.cpp predParams.hpp predParams_main.cpp
-	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) -I.. \
-	predParams.cpp predParams_main.cpp $(files) -o predParams
+predParams: $(files) $(headers) predParams.cpp predParams.hpp predParams_main.cpp predParams_main_singleFile.cpp
+	$(CXX) $(CXXFLAGS) $(CPPOPTFLAGS) -I.. predParams_main_singleFile.cpp -o predParams
 
 
 clean:
