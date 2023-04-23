@@ -1,3 +1,6 @@
+#ifndef PRED_PARAMS_HPP
+#define PRED_PARAMS_HPP
+
 #include <string>
 #include <vector>
 
@@ -22,3 +25,5 @@ void emulate_many_logliks(
     std::vector<SimulationParams> particles, float distance, float elevation_mean,
     float elevation_sd, float upper_limit, uint n_replicates = 10
 );
+
+#endif
