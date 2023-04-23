@@ -17,3 +17,5 @@ graphics/fire_animation_data
 graphics/burned_probabilities_data
 graphics/*.mp4
 graphics/*.png
+
+src/predParams/predParams
