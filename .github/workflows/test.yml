@@ -23,3 +23,6 @@ jobs:
     - name: make main
       working-directory: src
       run: make CXX=g++-12 main
+    - name: make graphics
+      working-directory: graphics
+      run: make CXX=g++-12
