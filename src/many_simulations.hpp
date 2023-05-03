@@ -49,6 +49,8 @@ std::vector<std::vector<compare_result>> emulate_loglik(
     int n_replicates = 10
 );
 
+// Make `n_replicates` simulations and return a matrix in witch each element represents the
+// amount of simulation in which the corresponding cell was burned.
 Matrix<uint> burned_amounts_per_cell(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     SimulationParams params, float distance, float elevation_mean, float elevation_sd,
