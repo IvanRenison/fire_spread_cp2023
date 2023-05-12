@@ -78,6 +78,10 @@ Fire simulate_fire(
     burned_bin[cell_0, cell_1] = 1;
   }
 
+  uint64_t random_array[burning_size];
+  next(random_array, burning_size);
+  int i_random = 0;
+
   while (burning_size > 0) {
     int end_forward = end;
 
@@ -145,8 +149,8 @@ Fire simulate_fire(
 
         // Burn with probability prob (Bernoulli)
 
-	bool burn = ((float)next()/UINT64_MAX) < prob;
-
+        bool burn = ((float)random_array[i_random] / (float)UINT64_MAX) < prob;
+        i_random++;
         if (burn == 0)
           continue;
 
