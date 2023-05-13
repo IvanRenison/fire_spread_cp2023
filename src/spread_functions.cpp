@@ -13,24 +13,24 @@
 #include "wtime.hpp"
 #endif
 
-float spread_probability(
+static inline float spread_probability(
     Cell* burning, Cell* neighbour, SimulationParams params, float angle, float distance,
     float elevation_mean, float elevation_sd, float upper_limit = 1.0
 ) {
 
-  float slope_term = sinf(atanf((neighbour->elevation - burning->elevation) / distance));
-  float wind_term = cosf(angle - burning->wind_direction);
-  float elev_term = (neighbour->elevation - elevation_mean) / elevation_sd;
+  float elevation_diff = neighbour->elevation - burning->elevation;
+  float distance_sq = distance * distance;
+  float slope_term = elevation_diff / sqrtf(distance_sq + elevation_diff * elevation_diff);
+  float wind_angle = angle - burning->wind_direction;
+  float wind_term = cosf(wind_angle);
+  float elev_diff_mean = neighbour->elevation - elevation_mean;
+  float elev_term = elev_diff_mean / elevation_sd;
 
   float linpred = params.independent_pred;
 
-  if (neighbour->vegetation_type == SUBALPINE) {
-    linpred += params.subalpine_pred;
-  } else if (neighbour->vegetation_type == WET) {
-    linpred += params.wet_pred;
-  } else if (neighbour->vegetation_type == DRY) {
-    linpred += params.dry_pred;
-  }
+  linpred += params.subalpine_pred * (neighbour->vegetation_type == SUBALPINE);
+  linpred += params.wet_pred * (neighbour->vegetation_type == WET);
+  linpred += params.dry_pred * (neighbour->vegetation_type == DRY);
 
   linpred += params.fwi_pred * neighbour->fwi;
   linpred += params.aspect_pred * neighbour->aspect;
@@ -38,7 +38,7 @@ float spread_probability(
   linpred += wind_term * params.wind_pred + elev_term * params.elevation_pred +
              slope_term * params.slope_pred;
 
-  float prob = upper_limit / (1 + exp(-linpred));
+  float prob = upper_limit / (1.0f + expf(-linpred));
 
   return prob;
 }
@@ -99,6 +99,8 @@ Fire simulate_fire(
 
       const int moves[8][2] = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 },
                                 { 0, 1 },   { 1, -1 }, { 1, 0 },  { 1, 1 } };
+      const float angles[8] = { M_PI * 3 / 4, M_PI, M_PI * 5 / 4, M_PI / 2, M_PI * 3 / 2,
+                                M_PI / 4,     0,    M_PI * 7 / 4 };
 
       uint neighbors_coords[2][8];
 
@@ -108,44 +110,64 @@ Fire simulate_fire(
       }
       // Note that in the case 0 - 1 we will have UINT_MAX
 
-      // Loop over neighbors_coords of the focal burning cell
+      bool out_of_range[8];
+      for (int n = 0; n < 8; n++) {
+        out_of_range[n] = neighbors_coords[0][n] >= n_col || // check rows
+                          neighbors_coords[1][n] >= n_row    // check cols
+            ;
+      }
+
+      Cell neighbour_cell[8];
+      for (int n = 0; n < 8; n++) {
+        if (!out_of_range[n]) {
+          neighbour_cell[n] = landscape[neighbors_coords[0][n], neighbors_coords[1][n]];
+        } else {
+          neighbour_cell[n] = Cell();
+        }
+      }
+
+      bool burnable_cell[8];
+      for (int n = 0; n < 8; n++) {
+        if (!out_of_range[n]) {
+          burnable_cell[n] = !burned_bin[neighbors_coords[0][n], neighbors_coords[1][n]] &&
+                             neighbour_cell[n].burnable;
+        } else {
+          burnable_cell[n] = false;
+        }
+      }
+
+      float prob[8];
+      for (int n = 0; n < 8; n++) {
+        prob[n] = spread_probability(
+            &burning_cell, &neighbour_cell[n], params, angles[n], distance, elevation_mean,
+            elevation_sd, upper_limit
+        );
+      }
+
+      bool burn[8];
+      for (int n = 0; n < 8; n++) {
+        if (!out_of_range[n]) {
+          burn[n] = bernoulli(prob[n]);
+        }
+      }
 
       for (int n = 0; n < 8; n++) {
 
         uint neighbour_cell_0 = neighbors_coords[0][n];
         uint neighbour_cell_1 = neighbors_coords[1][n];
 
-        // Is the cell in range?
-        bool out_of_range = neighbour_cell_0 >= n_col || // check rows
-                            neighbour_cell_1 >= n_row    // check cols
-            ;
         // This is okey if n_row, n_col < UINT_MAX
-        if (out_of_range)
+        if (out_of_range[n])
           continue;
 
-        Cell neighbour_cell = landscape[neighbour_cell_0, neighbour_cell_1];
-
-        // Is the cell burnable?
-        bool burnable_cell =
-            !burned_bin[neighbour_cell_0, neighbour_cell_1] && neighbour_cell.burnable;
-
-        if (!burnable_cell)
+        if (!burnable_cell[n])
           continue;
-
-        const float angles[8] = { M_PI * 3 / 4, M_PI, M_PI * 5 / 4, M_PI / 2, M_PI * 3 / 2,
-                                   M_PI / 4,     0,    M_PI * 7 / 4 };
 
         // simulate fire
-        float prob = spread_probability(
-            &burning_cell, &neighbour_cell, params, angles[n], distance, elevation_mean,
-            elevation_sd, upper_limit
-        );
 
         // Burn with probability prob (Bernoulli)
 
-        bool burn = bernoulli(prob);
-
-        if (burn == 0)
+        if (!burn[n])
           continue;
 
         // If burned,
