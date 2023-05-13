@@ -77,11 +77,8 @@ Fire simulate_fire(
     uint cell_1 = ignition_cells[i].second;
     burned_bin[cell_0, cell_1] = 1;
   }
-  uint64_t *random_array = (uint64_t *)calloc(n_cell, sizeof(uint64_t));
   while (burning_size > 0) {
     int end_forward = end;
-    next(random_array, burning_size);
-    uint i_random = 0;
 #ifdef BENCHMARKING
     double start_time, burned_cell_per_time, time_elapsed;
     start_time = 0.0;
@@ -146,8 +143,7 @@ Fire simulate_fire(
 
         // Burn with probability prob (Bernoulli)
 
-        bool burn = ((float)random_array[i_random] / (float)UINT64_MAX) < prob;
-        i_random++;
+        bool burn = bernoulli(prob);
 
         if (burn == 0)
           continue;
@@ -179,7 +175,7 @@ Fire simulate_fire(
     burning_size = end - start;
 
   } // end while
-  free(random_array);
+
   Fire fire(n_col, n_row, burned_bin, burned_ids);
 
 #ifdef GRAPHICS
