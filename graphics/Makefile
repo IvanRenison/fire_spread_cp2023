@@ -2,7 +2,7 @@ CXX = g++
 CXXSTD = c++23
 CXXFLAGS = -Wall -Wextra -Werror -std=$(CXXSTD)
 
-CPPOPTFLAGS = -Ofast
+CPPOPTFLAGS = -Ofast -ftree-vectorize -march=native
 
 files = $(filter-out ../src/main.cpp,$(wildcard ../src/*.cpp))
 headers = $(wildcard ../src/*.hpp)

@@ -38,30 +38,18 @@ static __inline uint64_t rotl(const uint64_t x, int k) {
   return (x << k) | (x >> (64 - k));
 }
 
-void next(uint64_t* const __restrict__ array, int len) {
+void next(uint64_t* const __restrict__ array) {
   uint64_t t[XOSHIRO256_UNROLL];
 
-  for (int b = 0; b < len; b += XOSHIRO256_UNROLL) {
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      array[b + i] = s[0][i] + s[3][i];
-
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      t[i] = s[1][i] << 17;
-
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      s[2][i] ^= s[0][i];
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      s[3][i] ^= s[1][i];
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      s[1][i] ^= s[2][i];
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      s[0][i] ^= s[3][i];
-
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      s[2][i] ^= t[i];
-
-    for (int i = 0; i < XOSHIRO256_UNROLL; i++)
-      s[3][i] = rotl(s[3][i], 45);
+  for (int i = 0; i < XOSHIRO256_UNROLL; i++) {
+    array[i] = s[0][i] + s[3][i];
+    t[i] = s[1][i] << 17;
+    s[2][i] ^= s[0][i];
+    s[3][i] ^= s[1][i];
+    s[1][i] ^= s[2][i];
+    s[0][i] ^= s[3][i];
+    s[2][i] ^= t[i];
+    s[3][i] = rotl(s[3][i], 45);
   }
 }
 
@@ -73,7 +61,7 @@ static unsigned int index = 0;
 bool bernoulli(float p) {
 
   if (index == 0) {
-    next((uint64_t*)s16, 4 * XOSHIRO256_UNROLL);
+    next((uint64_t*)s16);
   }
 
   uint16_t r = s16[index];
