@@ -13,36 +13,6 @@
 #include "wtime.hpp"
 #endif
 
-static inline float spread_probability(
-    Cell* burning, Cell* neighbour, SimulationParams params, float angle, float distance,
-    float elevation_mean, float elevation_sd, float upper_limit = 1.0
-) {
-
-  float elevation_diff = neighbour->elevation - burning->elevation;
-  float distance_sq = distance * distance;
-  float slope_term = elevation_diff / sqrtf(distance_sq + elevation_diff * elevation_diff);
-  float wind_angle = angle - burning->wind_direction;
-  float wind_term = cosf(wind_angle);
-  float elev_diff_mean = neighbour->elevation - elevation_mean;
-  float elev_term = elev_diff_mean / elevation_sd;
-
-  float linpred = params.independent_pred;
-
-  linpred += params.subalpine_pred * (neighbour->vegetation_type == SUBALPINE);
-  linpred += params.wet_pred * (neighbour->vegetation_type == WET);
-  linpred += params.dry_pred * (neighbour->vegetation_type == DRY);
-
-  linpred += params.fwi_pred * neighbour->fwi;
-  linpred += params.aspect_pred * neighbour->aspect;
-
-  linpred += wind_term * params.wind_pred + elev_term * params.elevation_pred +
-             slope_term * params.slope_pred;
-
-  float prob = upper_limit / (1.0f + expf(-linpred));
-
-  return prob;
-}
-
 Fire simulate_fire(
     Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
     SimulationParams params, float distance, float elevation_mean, float elevation_sd,
@@ -136,12 +106,48 @@ Fire simulate_fire(
         }
       }
 
+      float elevations_diff[8];
+      for (int n = 0; n < 8; n++) {
+        elevations_diff[n] = neighbour_cell[n].elevation - burning_cell.elevation;
+      }
+
+      float distance_sq[8];
+      for (int n = 0; n < 8; n++) {
+        distance_sq[n] = distance * distance;
+      }
+
+      float slope_term[8];
+      for (int n = 0; n < 8; n++) {
+        slope_term[n] = elevations_diff[n] /
+                        sqrtf(distance_sq[n] + elevations_diff[n] * elevations_diff[n]);
+      }
+
+      float wind_term[8];
+      for (int n = 0; n < 8; n++) {
+        float wind_angle = angles[n] - burning_cell.wind_direction;
+        wind_term[n] = cosf(wind_angle);
+      }
+
+      float elev_term[8];
+      for (int n = 0; n < 8; n++) {
+        elev_term[n] = (neighbour_cell[n].elevation - elevation_mean) / elevation_sd;
+      }
+
+      float linpred[8];
+      for (int n = 0; n < 8; n++) {
+        linpred[n] = params.independent_pred;
+        linpred[n] += params.subalpine_pred * (neighbour_cell[n].vegetation_type == SUBALPINE);
+        linpred[n] += params.wet_pred * (neighbour_cell[n].vegetation_type == WET);
+        linpred[n] += params.dry_pred * (neighbour_cell[n].vegetation_type == DRY);
+        linpred[n] += params.fwi_pred * neighbour_cell[n].fwi;
+        linpred[n] += params.aspect_pred * neighbour_cell[n].aspect;
+        linpred[n] += wind_term[n] * params.wind_pred + elev_term[n] * params.elevation_pred +
+                      slope_term[n] * params.slope_pred;
+      }
+
       float prob[8];
       for (int n = 0; n < 8; n++) {
-        prob[n] = spread_probability(
-            &burning_cell, &neighbour_cell[n], params, angles[n], distance, elevation_mean,
-            elevation_sd, upper_limit
-        );
+        prob[n] = upper_limit / (1.0f + expf(-linpred[n]));
       }
 
       bool burn[8];
