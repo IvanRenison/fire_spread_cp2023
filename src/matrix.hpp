@@ -10,11 +10,13 @@ public:
 
   Matrix(size_t width, size_t height) : width(width), height(height), elems(width * height){};
 
-  T operator[](size_t index1, size_t index2) const {
+  T operator[](std::pair<size_t, size_t> indexes) const {
+    auto [index1, index2] = indexes;
     return elems[index2 * width + index1];
   };
 
-  T& operator[](size_t index1, size_t index2) {
+  T& operator[](std::pair<size_t, size_t> indexes) {
+    auto [index1, index2] = indexes;
     return elems[index2 * width + index1];
   };
 

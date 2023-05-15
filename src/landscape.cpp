@@ -38,29 +38,29 @@ Landscape::Landscape(std::string filename_prefix) : cells(0, 0) {
         throw std::runtime_error("Invalid landscape file");
       }
       if (atoi((*loop_csv)[0].data()) == 1) {
-        cells[i, j].vegetation_type = SUBALPINE;
+        cells[{ i, j }].vegetation_type = SUBALPINE;
       } else if (atoi((*loop_csv)[1].data()) == 1) {
-        cells[i, j].vegetation_type = WET;
+        cells[{ i, j }].vegetation_type = WET;
       } else if (atoi((*loop_csv)[2].data()) == 1) {
-        cells[i, j].vegetation_type = DRY;
+        cells[{ i, j }].vegetation_type = DRY;
       } else {
-        cells[i, j].vegetation_type = MATORRAL;
+        cells[{ i, j }].vegetation_type = MATORRAL;
       }
-      cells[i, j].fwi = atof((*loop_csv)[3].data());
-      cells[i, j].aspect = atof((*loop_csv)[4].data());
-      cells[i, j].wind_direction = atof((*loop_csv)[5].data());
-      cells[i, j].elevation = atof((*loop_csv)[6].data());
-      cells[i, j].burnable = atoi((*loop_csv)[7].data());
+      cells[{ i, j }].fwi = atof((*loop_csv)[3].data());
+      cells[{ i, j }].aspect = atof((*loop_csv)[4].data());
+      cells[{ i, j }].wind_direction = atof((*loop_csv)[5].data());
+      cells[{ i, j }].elevation = atof((*loop_csv)[6].data());
+      cells[{ i, j }].burnable = atoi((*loop_csv)[7].data());
     }
   }
 }
 
-Cell Landscape::operator[](size_t index1, size_t index2) const {
-  return cells[index1, index2];
+Cell Landscape::operator[](std::pair<size_t, size_t> indexes) const {
+  return cells[indexes];
 }
 
-Cell& Landscape::operator[](size_t index1, size_t index2) {
-  return cells[index1, index2];
+Cell& Landscape::operator[](std::pair<size_t, size_t> indexes) {
+  return cells[indexes];
 }
 
 void Landscape::print_csv() const {
@@ -69,11 +69,11 @@ void Landscape::print_csv() const {
       << std::endl;
   for (uint j = 0; j < height; j++) {
     for (uint i = 0; i < width; i++) {
-      std::cout << (cells[i, j].vegetation_type == SUBALPINE) << ","
-                << (cells[i, j].vegetation_type == WET) << ","
-                << (cells[i, j].vegetation_type == DRY) << "," << cells[i, j].fwi << ","
-                << cells[i, j].aspect << "," << cells[i, j].wind_direction << ","
-                << cells[i, j].elevation << "," << cells[i, j].burnable << std::endl;
+      std::cout << (cells[{ i, j }].vegetation_type == SUBALPINE) << ","
+                << (cells[{ i, j }].vegetation_type == WET) << ","
+                << (cells[{ i, j }].vegetation_type == DRY) << "," << cells[{ i, j }].fwi << ","
+                << cells[{ i, j }].aspect << "," << cells[{ i, j }].wind_direction << ","
+                << cells[{ i, j }].elevation << "," << cells[{ i, j }].burnable << std::endl;
     }
   }
 }

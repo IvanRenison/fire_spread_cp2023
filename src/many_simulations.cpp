@@ -24,11 +24,11 @@ compare_result compare_fires(
   // compute common pixels only in the smaller fire
   if (size1 <= size2) {
     for (int i = 0; i < size1; i++) {
-      common += burned2[burned_ids1[i].first, burned_ids1[i].second];
+      common += burned2[{ burned_ids1[i].first, burned_ids1[i].second }];
     }
   } else {
     for (int i = 0; i < size2; i++) {
-      common += burned1[burned_ids2[i].first, burned_ids2[i].second];
+      common += burned1[{ burned_ids2[i].first, burned_ids2[i].second }];
     }
   }
 
@@ -177,8 +177,8 @@ Matrix<uint> burned_amounts_per_cell(
 
     for (uint row = 0; row < landscape.width; row++) {
       for (uint col = 0; col < landscape.height; col++) {
-        if (fire.burned_layer[row, col]) {
-          burned_amounts[row, col] += 1;
+        if (fire.burned_layer[{ row, col }]) {
+          burned_amounts[{ row, col }] += 1;
         }
       }
     }

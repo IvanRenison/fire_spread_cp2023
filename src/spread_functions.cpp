@@ -75,7 +75,7 @@ Fire simulate_fire(
   for (int i = 0; i < end; i++) {
     uint cell_0 = ignition_cells[i].first;
     uint cell_1 = ignition_cells[i].second;
-    burned_bin[cell_0, cell_1] = 1;
+    burned_bin[{ cell_0, cell_1 }] = 1;
   }
   while (burning_size > 0) {
     int end_forward = end;
@@ -95,7 +95,7 @@ Fire simulate_fire(
       uint burning_cell_0 = burned_ids[b].first;
       uint burning_cell_1 = burned_ids[b].second;
 
-      Cell burning_cell = landscape[burning_cell_0, burning_cell_1];
+      Cell burning_cell = landscape[{ burning_cell_0, burning_cell_1 }];
 
       const int moves[8][2] = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 },
                                 { 0, 1 },   { 1, -1 }, { 1, 0 },  { 1, 1 } };
@@ -120,7 +120,7 @@ Fire simulate_fire(
       Cell neighbour_cell[8];
       for (int n = 0; n < 8; n++) {
         if (!out_of_range[n]) {
-          neighbour_cell[n] = landscape[neighbors_coords[0][n], neighbors_coords[1][n]];
+          neighbour_cell[n] = landscape[{ neighbors_coords[0][n], neighbors_coords[1][n] }];
         } else {
           neighbour_cell[n] = Cell();
         }
@@ -129,7 +129,7 @@ Fire simulate_fire(
       bool burnable_cell[8];
       for (int n = 0; n < 8; n++) {
         if (!out_of_range[n]) {
-          burnable_cell[n] = !burned_bin[neighbors_coords[0][n], neighbors_coords[1][n]] &&
+          burnable_cell[n] = !burned_bin[{ neighbors_coords[0][n], neighbors_coords[1][n] }] &&
                              neighbour_cell[n].burnable;
         } else {
           burnable_cell[n] = false;
@@ -176,7 +176,7 @@ Fire simulate_fire(
         // (but advance end_forward first)
         end_forward += 1;
         burned_ids.push_back({ neighbour_cell_0, neighbour_cell_1 });
-        burned_bin[neighbour_cell_0, neighbour_cell_1] = true;
+        burned_bin[{ neighbour_cell_0, neighbour_cell_1 }] = true;
 
       } // end loop over neighbors_coords of burning cell b
 

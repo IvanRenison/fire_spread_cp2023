@@ -28,7 +28,7 @@ Fire::Fire(uint width, uint height, std::string filename_prefix)
     if (x >= width || y >= height) {
       throw std::runtime_error("Invalid fire file");
     }
-    burned_layer[x, y] = true;
+    burned_layer[{ x, y }] = true;
     burned_ids.push_back({ x, y });
   }
 }
@@ -41,7 +41,7 @@ FireStats get_fire_stats(Fire fire, Landscape landscape) {
     uint x = cell_xy.first;
     uint y = cell_xy.second;
 
-    Cell cell = landscape[x, y];
+    Cell cell = landscape[{ x, y }];
 
     if (cell.vegetation_type == SUBALPINE) {
       stats.counts_veg_subalpine++;

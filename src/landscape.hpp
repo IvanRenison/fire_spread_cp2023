@@ -11,14 +11,9 @@
 #include "types.h"
 
 // enum of vegetation type between: matorral, subalpine, wet, dry
-enum VegetationType {
-  MATORRAL,
-  SUBALPINE,
-  WET,
-  DRY
-} __attribute__((packed));
+enum VegetationType { MATORRAL, SUBALPINE, WET, DRY } __attribute__((packed));
 
-static_assert( sizeof(VegetationType) == 1 );
+static_assert(sizeof(VegetationType) == 1);
 
 typedef struct _s_Cell {
   float elevation;
@@ -37,8 +32,8 @@ public:
   Landscape(uint width, uint height);
   Landscape(std::string filename_prefix);
 
-  Cell operator[](size_t index1, size_t index2) const;
-  Cell& operator[](size_t index1, size_t index2);
+  Cell operator[](std::pair<size_t, size_t> indexes) const;
+  Cell& operator[](std::pair<size_t, size_t> indexes);
 
   void print_csv() const;
 

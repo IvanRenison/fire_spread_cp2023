@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
         if (j != 0) {
           std::cout << " ";
         }
-        std::cout << burned_amounts[j, i];
+        std::cout << burned_amounts[{j, i}];
       }
       std::cout << std::endl;
     }
