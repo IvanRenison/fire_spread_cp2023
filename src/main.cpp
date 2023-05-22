@@ -32,7 +32,6 @@ int main(int argc, char* argv[]) {
     IgnitionCells ignition_cells =
         read_ignition_cells(landscape_file_prefix + "-ignition_points.csv");
 
-
     // read de fire
     Fire fire(landscape.width, landscape.height, landscape_file_prefix);
 
@@ -44,8 +43,8 @@ int main(int argc, char* argv[]) {
     }
 
     std::vector<std::vector<compare_result>> many_particles_result = emulate_loglik(
-        landscape, ignition_cells, particles, DISTANCE, ELEVATION_MEAN, ELEVATION_SD, UPPER_LIMIT, fire, fire_stats,
-        m_same_particles
+        landscape, ignition_cells, particles, DISTANCE, ELEVATION_MEAN, ELEVATION_SD,
+        UPPER_LIMIT, fire, fire_stats, m_same_particles
     );
 
   } catch (std::runtime_error& e) {

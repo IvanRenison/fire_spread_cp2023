@@ -38,7 +38,6 @@ std::istream& operator>>(std::istream& str, CSVRow& data) {
   return str;
 }
 
-
 CSVIterator::CSVIterator(std::istream& str) : m_str(str.good() ? &str : nullptr) {
   ++(*this);
 }
@@ -60,7 +59,6 @@ CSVIterator CSVIterator::operator++(int) {
   return tmp;
 }
 
-
 CSVRow const& CSVIterator::operator*() const {
   return m_row;
 }
@@ -76,11 +74,10 @@ bool CSVIterator::operator!=(CSVIterator const& rhs) {
   return !((*this) == rhs);
 }
 
-
 CSVRange::CSVRange(std::istream& str) : stream(str) {}
 
 CSVIterator CSVRange::begin() const {
-  return CSVIterator{stream};
+  return CSVIterator{ stream };
 }
 
 CSVIterator CSVRange::end() const {

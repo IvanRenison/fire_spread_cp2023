@@ -47,14 +47,14 @@ int main(int argc, char* argv[]) {
     uint step = 0;
     uint i = 0;
     for (uint j : fire.burned_ids_steps) {
-        if (i >= j) {
-            continue;
-        }
-        std::cout << "Step " << step << ":" << std::endl;
-        for (; i < j; i++) {
-            std::cout << fire.burned_ids[i].first << " " << fire.burned_ids[i].second << std::endl;
-        }
-        step++;
+      if (i >= j) {
+        continue;
+      }
+      std::cout << "Step " << step << ":" << std::endl;
+      for (; i < j; i++) {
+        std::cout << fire.burned_ids[i].first << " " << fire.burned_ids[i].second << std::endl;
+      }
+      step++;
     }
 
   } catch (std::runtime_error& e) {

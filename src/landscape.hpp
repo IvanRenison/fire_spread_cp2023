@@ -11,14 +11,9 @@
 #include "types.h"
 
 // enum of vegetation type between: matorral, subalpine, wet, dry
-enum VegetationType {
-  MATORRAL,
-  SUBALPINE,
-  WET,
-  DRY
-} __attribute__((packed));
+enum VegetationType { MATORRAL, SUBALPINE, WET, DRY } __attribute__((packed));
 
-static_assert( sizeof(VegetationType) == 1 );
+static_assert(sizeof(VegetationType) == 1);
 
 typedef struct _s_Cell {
   float elevation;

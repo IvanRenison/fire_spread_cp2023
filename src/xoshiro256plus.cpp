@@ -33,7 +33,6 @@ static uint64_t s[4][XOSHIRO256_UNROLL] = {
     next_splitmix64(), next_splitmix64(), next_splitmix64(), next_splitmix64() }
 };
 
-
 static __inline uint64_t rotl(const uint64_t x, int k) {
   return (x << k) | (x >> (64 - k));
 }
@@ -53,8 +52,7 @@ void next(uint64_t* const __restrict__ array) {
   }
 }
 
-
-static uint16_t s16[4*XOSHIRO256_UNROLL];
+static uint16_t s16[4 * XOSHIRO256_UNROLL];
 
 static unsigned int index = 0;
 
