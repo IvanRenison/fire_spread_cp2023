@@ -21,7 +21,7 @@ public:
   #ifdef GRAPHICS
   // Positions in burned_ids where a new step starts
   std::vector<uint> burned_ids_steps;
-  #endif
+#endif
 
   bool operator==(const Fire& other) const {
     return width == other.width && height == other.height &&
