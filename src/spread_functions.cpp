@@ -14,26 +14,26 @@
 #endif
 
 static inline float spread_probability(
-    Cell* burning, Cell* neighbour, SimulationParams params, float angle, float distance,
-    float elevation_mean, float elevation_sd, float upper_limit = 1.0
+    const Cell& burning, const Cell& neighbour, const SimulationParams& params, float angle,
+    float distance, float elevation_mean, float elevation_sd, float upper_limit = 1.0
 ) {
 
-  float elevation_diff = neighbour->elevation - burning->elevation;
+  float elevation_diff = neighbour.elevation - burning.elevation;
   float distance_sq = distance * distance;
   float slope_term = elevation_diff / sqrtf(distance_sq + elevation_diff * elevation_diff);
-  float wind_angle = angle - burning->wind_direction;
+  float wind_angle = angle - burning.wind_direction;
   float wind_term = cosf(wind_angle);
-  float elev_diff_mean = neighbour->elevation - elevation_mean;
+  float elev_diff_mean = neighbour.elevation - elevation_mean;
   float elev_term = elev_diff_mean / elevation_sd;
 
   float linpred = params.independent_pred;
 
-  linpred += params.subalpine_pred * (neighbour->vegetation_type == SUBALPINE);
-  linpred += params.wet_pred * (neighbour->vegetation_type == WET);
-  linpred += params.dry_pred * (neighbour->vegetation_type == DRY);
+  linpred += params.subalpine_pred * (neighbour.vegetation_type == SUBALPINE);
+  linpred += params.wet_pred * (neighbour.vegetation_type == WET);
+  linpred += params.dry_pred * (neighbour.vegetation_type == DRY);
 
-  linpred += params.fwi_pred * neighbour->fwi;
-  linpred += params.aspect_pred * neighbour->aspect;
+  linpred += params.fwi_pred * neighbour.fwi;
+  linpred += params.aspect_pred * neighbour.aspect;
 
   linpred += wind_term * params.wind_pred + elev_term * params.elevation_pred +
              slope_term * params.slope_pred;
@@ -44,8 +44,8 @@ static inline float spread_probability(
 }
 
 Fire simulate_fire(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const SimulationParams& params, float distance, float elevation_mean, float elevation_sd,
     float upper_limit = 1.0
 ) {
 
@@ -139,7 +139,7 @@ Fire simulate_fire(
       float prob[8];
       for (int n = 0; n < 8; n++) {
         prob[n] = spread_probability(
-            &burning_cell, &neighbour_cell[n], params, angles[n], distance, elevation_mean,
+            burning_cell, neighbour_cell[n], params, angles[n], distance, elevation_mean,
             elevation_sd, upper_limit
         );
       }

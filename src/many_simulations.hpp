@@ -28,7 +28,8 @@ typedef struct _s_compare_result {
 // computes many similarity indexes; after selecting one we will have a function to compute
 // only the best one.
 compare_result compare_fires(
-    Fire fire1, FireStats fire1stats, Fire fire2, FireStats fire2stats, float lscale = 0.2
+    const Fire& fire1, const FireStats& fire1stats, const Fire& fire2,
+    const FireStats& fire2stats, float lscale = 0.2
 );
 
 // Function to emulate the spread model's likelihood, approximated by many similarity indexes
@@ -36,24 +37,25 @@ compare_result compare_fires(
 // returns the simulated fire with data useful for comparison. In addition, it takes as
 // arguments data from the observed fire to be compared.
 std::vector<compare_result> emulate_loglik_particle(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates = 10
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    float upper_limit, const Fire& fire_ref, const FireStats& fire_ref_stats,
+    int n_replicates = 10
 );
 
 // The same function but evaluating many particles all at once
 std::vector<std::vector<compare_result>> emulate_loglik(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    std::vector<SimulationParams> particles, float distance, float elevation_mean,
-    float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
-    int n_replicates = 10
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const std::vector<SimulationParams>& particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, const Fire& fire_ref,
+    const FireStats& fire_ref_stats, int n_replicates = 10
 );
 
 // Make `n_replicates` simulations and return a matrix in witch each element represents the
 // amount of simulation in which the corresponding cell was burned.
 Matrix<uint> burned_amounts_per_cell(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const SimulationParams& params, float distance, float elevation_mean, float elevation_sd,
     float upper_limit, uint n_replicates
 );
 

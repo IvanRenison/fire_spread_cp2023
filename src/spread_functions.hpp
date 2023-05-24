@@ -19,8 +19,8 @@ typedef struct _s_simulation_params {
 } SimulationParams;
 
 Fire simulate_fire(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const SimulationParams& params, float distance, float elevation_mean, float elevation_sd,
     float upper_limit
 );
 

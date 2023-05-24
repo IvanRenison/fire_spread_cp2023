@@ -43,6 +43,6 @@ typedef struct _s_FireStats {
   uint counts_veg_dry;
 } FireStats;
 
-FireStats get_fire_stats(Fire fire, Landscape landscape);
+FireStats get_fire_stats(const Fire& fire, const Landscape& landscape);
 
 #endif

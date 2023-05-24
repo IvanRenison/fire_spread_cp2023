@@ -33,7 +33,7 @@ Fire::Fire(uint width, uint height, std::string filename_prefix)
   }
 }
 
-FireStats get_fire_stats(Fire fire, Landscape landscape) {
+FireStats get_fire_stats(const Fire& fire, const Landscape& landscape) {
 
   FireStats stats = { 0, 0, 0, 0 };
 

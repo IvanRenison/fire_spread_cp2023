@@ -4,7 +4,8 @@
 #include <cmath>
 
 compare_result compare_fires(
-    Fire fire1, FireStats fire1stats, Fire fire2, FireStats fire2stats, float lscale
+    const Fire& fire1, const FireStats& fire1stats, const Fire& fire2,
+    const FireStats& fire2stats, float lscale
 ) {
 
   assert(fire1.width == fire2.width && fire1.height == fire2.height);
@@ -120,9 +121,10 @@ compare_result compare_fires(
 }
 
 std::vector<compare_result> emulate_loglik_particle(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit, Fire fire_ref, FireStats fire_ref_stats, int n_replicates
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    float upper_limit, const Fire& fire_ref, const FireStats& fire_ref_stats,
+    int n_replicates
 ) {
 
   std::vector<compare_result> similarity(n_replicates);
@@ -142,10 +144,10 @@ std::vector<compare_result> emulate_loglik_particle(
 }
 
 std::vector<std::vector<compare_result>> emulate_loglik(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    std::vector<SimulationParams> particles, float distance, float elevation_mean,
-    float elevation_sd, float upper_limit, Fire fire_ref, FireStats fire_ref_stats,
-    int n_replicates
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const std::vector<SimulationParams>& particles, float distance, float elevation_mean,
+    float elevation_sd, float upper_limit, const Fire& fire_ref,
+    const FireStats& fire_ref_stats, int n_replicates
 ) {
 
   int n_particles = particles.size();
@@ -163,8 +165,8 @@ std::vector<std::vector<compare_result>> emulate_loglik(
 }
 
 Matrix<uint> burned_amounts_per_cell(
-    Landscape landscape, std::vector<std::pair<uint, uint>> ignition_cells,
-    SimulationParams params, float distance, float elevation_mean, float elevation_sd,
+    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
+    const SimulationParams& params, float distance, float elevation_mean, float elevation_sd,
     float upper_limit, uint n_replicates
 ) {
 
