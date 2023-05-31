@@ -34,9 +34,12 @@ int main(int argc, char* argv[]) {
     IgnitionCells ignition_cells =
         read_ignition_cells(landscape_file_prefix + "-ignition_points.csv");
 
-    std::srand(SEED);
+    splitmix64 rng_splitmix64(SEED);
+
+    Xoshiro256plus rng(rng_splitmix64);
+
     Fire fire = simulate_fire(
-        landscape, ignition_cells, random_params(), DISTANCE, ELEVATION_MEAN, ELEVATION_SD,
+        rng, landscape, ignition_cells, random_params(), DISTANCE, ELEVATION_MEAN, ELEVATION_SD,
         UPPER_LIMIT
     );
 
