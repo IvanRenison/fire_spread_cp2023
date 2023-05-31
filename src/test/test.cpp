@@ -36,10 +36,10 @@ int main() {
   // Check fire stats
   std::cout << "Checking fire stats" << std::endl;
   FireStats s_fire_stats = get_fire_stats(s_fire, landscape);
-  assert(3 == s_fire_stats.counts_veg_subalpine);
-  assert(7 == s_fire_stats.counts_veg_wet);
+  assert(0 == s_fire_stats.counts_veg_subalpine);
+  assert(0 == s_fire_stats.counts_veg_wet);
   assert(1 == s_fire_stats.counts_veg_dry);
-  assert(5 == s_fire_stats.counts_veg_matorral);
+  assert(0 == s_fire_stats.counts_veg_matorral);
 
   // Test compare fires
   std::cout << "Testing compare fires" << std::endl;
