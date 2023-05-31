@@ -44,9 +44,9 @@ static inline float spread_probability(
 }
 
 Fire simulate_fire(
-    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
-    const SimulationParams& params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit = 1.0
+    Xoshiro256plus& rng, const Landscape& landscape,
+    const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams& params,
+    float distance, float elevation_mean, float elevation_sd, float upper_limit = 1.0
 ) {
 
   uint n_row = landscape.height;
@@ -147,7 +147,7 @@ Fire simulate_fire(
       bool burn[8];
       for (int n = 0; n < 8; n++) {
         if (!out_of_range[n]) {
-          burn[n] = bernoulli(prob[n]);
+          burn[n] = rng.bernoulli(prob[n]);
         }
       }
 

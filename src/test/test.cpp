@@ -17,12 +17,13 @@ int main() {
 
   SimulationParams params = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 };
 
-  // Set seed
-  std::srand(10);
+  splitmix64 rng_splitmix64(10);
+
+  Xoshiro256plus rng(rng_splitmix64);
 
   // simulate de fire
   std::cout << "Simulating the fire" << std::endl;
-  Fire s_fire = simulate_fire(landscape, ignition_cells, params, 30, 1163.3, 399.5, 0.5);
+  Fire s_fire = simulate_fire(rng, landscape, ignition_cells, params, 30, 1163.3, 399.5, 0.5);
 
   // Load the read file
   std::cout << "Reading the original fire" << std::endl;

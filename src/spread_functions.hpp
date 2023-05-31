@@ -5,6 +5,7 @@
 
 #include "fires.hpp"
 #include "landscape.hpp"
+#include "xoshiro256plus.hpp"
 
 typedef struct _s_simulation_params {
   float independent_pred;
@@ -19,9 +20,9 @@ typedef struct _s_simulation_params {
 } SimulationParams;
 
 Fire simulate_fire(
-    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
-    const SimulationParams& params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit
+    Xoshiro256plus& rng, const Landscape& landscape,
+    const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams& params,
+    float distance, float elevation_mean, float elevation_sd, float upper_limit
 );
 
 SimulationParams random_params();

@@ -1,7 +1,12 @@
 #include "many_simulations.hpp"
+#include "xoshiro256plus.hpp"
 
 #include <assert.h>
 #include <cmath>
+
+#ifndef SEED
+#define SEED 10
+#endif
 
 compare_result compare_fires(
     const Fire& fire1, const FireStats& fire1stats, const Fire& fire2,
@@ -121,10 +126,10 @@ compare_result compare_fires(
 }
 
 std::vector<compare_result> emulate_loglik_particle(
-    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
-    const SimulationParams params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit, const Fire& fire_ref, const FireStats& fire_ref_stats,
-    int n_replicates
+    Xoshiro256plus& rng, const Landscape& landscape,
+    const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams params,
+    float distance, float elevation_mean, float elevation_sd, float upper_limit,
+    const Fire& fire_ref, const FireStats& fire_ref_stats, int n_replicates
 ) {
 
   std::vector<compare_result> similarity(n_replicates);
@@ -133,7 +138,8 @@ std::vector<compare_result> emulate_loglik_particle(
 
     // simulate_fire
     Fire fire_sim = simulate_fire(
-        landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit
+        rng, landscape, ignition_cells, params, distance, elevation_mean, elevation_sd,
+        upper_limit
     );
 
     similarity[i] =
@@ -150,13 +156,17 @@ std::vector<std::vector<compare_result>> emulate_loglik(
     const FireStats& fire_ref_stats, int n_replicates
 ) {
 
+  splitmix64 rng_splitmix64(SEED);
+
+  Xoshiro256plus rng(rng_splitmix64);
+
   int n_particles = particles.size();
 
   std::vector<std::vector<compare_result>> similarity(n_particles);
 
   for (int part = 0; part < n_particles; part++) {
     similarity[part] = emulate_loglik_particle(
-        landscape, ignition_cells, particles[part], distance, elevation_mean, elevation_sd,
+        rng, landscape, ignition_cells, particles[part], distance, elevation_mean, elevation_sd,
         upper_limit, fire_ref, fire_ref_stats, n_replicates
     );
   }
@@ -170,11 +180,16 @@ Matrix<uint> burned_amounts_per_cell(
     float upper_limit, uint n_replicates
 ) {
 
+  splitmix64 rng_splitmix64(SEED);
+
+  Xoshiro256plus rng(rng_splitmix64);
+
   Matrix<uint> burned_amounts(landscape.width, landscape.height);
 
   for (uint i = 0; i < n_replicates; i++) {
     Fire fire = simulate_fire(
-        landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit
+        rng, landscape, ignition_cells, params, distance, elevation_mean, elevation_sd,
+        upper_limit
     );
 
     for (uint row = 0; row < landscape.width; row++) {

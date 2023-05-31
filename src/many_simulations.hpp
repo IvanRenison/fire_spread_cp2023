@@ -6,6 +6,7 @@
 #include "fires.hpp"
 #include "landscape.hpp"
 #include "spread_functions.hpp"
+#include "xoshiro256plus.hpp"
 
 typedef struct _s_compare_result {
   float overlap_sp;
@@ -37,10 +38,10 @@ compare_result compare_fires(
 // returns the simulated fire with data useful for comparison. In addition, it takes as
 // arguments data from the observed fire to be compared.
 std::vector<compare_result> emulate_loglik_particle(
-    const Landscape& landscape, const std::vector<std::pair<uint, uint>>& ignition_cells,
-    const SimulationParams params, float distance, float elevation_mean, float elevation_sd,
-    float upper_limit, const Fire& fire_ref, const FireStats& fire_ref_stats,
-    int n_replicates = 10
+    Xoshiro256plus& rng, const Landscape& landscape,
+    const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams params,
+    float distance, float elevation_mean, float elevation_sd, float upper_limit,
+    const Fire& fire_ref, const FireStats& fire_ref_stats, int n_replicates = 10
 );
 
 // The same function but evaluating many particles all at once
