@@ -2,6 +2,7 @@
 #define _MANY_SIMULATIONS_HPP
 
 #include <vector>
+#include <omp.h>
 
 #include "fires.hpp"
 #include "landscape.hpp"

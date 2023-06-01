@@ -133,7 +133,7 @@ std::vector<compare_result> emulate_loglik_particle(
 ) {
 
   std::vector<compare_result> similarity(n_replicates);
-
+  
   for (int i = 0; i < n_replicates; i++) {
 
     // simulate_fire
@@ -158,19 +158,22 @@ std::vector<std::vector<compare_result>> emulate_loglik(
 
   splitmix64 rng_splitmix64(SEED);
 
-  Xoshiro256plus rng(rng_splitmix64);
-
   int n_particles = particles.size();
 
   std::vector<std::vector<compare_result>> similarity(n_particles);
 
-  for (int part = 0; part < n_particles; part++) {
-    similarity[part] = emulate_loglik_particle(
-        rng, landscape, ignition_cells, particles[part], distance, elevation_mean, elevation_sd,
-        upper_limit, fire_ref, fire_ref_stats, n_replicates
-    );
-  }
+  #pragma omp parallel firstprivate(n_replicates, n_particles, landscape, ignition_cells, distance, elevation_mean, elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles) shared(rng_splitmix64, similarity) default(none)
+  {
+    Xoshiro256plus rng(rng_splitmix64);
 
+    #pragma omp for
+    for (int part = 0; part < n_particles; part++) {
+      similarity[part] = emulate_loglik_particle(
+          rng, landscape, ignition_cells, particles[part], distance, elevation_mean, elevation_sd,
+          upper_limit, fire_ref, fire_ref_stats, n_replicates
+      );
+    }
+  }
   return similarity;
 }
 
