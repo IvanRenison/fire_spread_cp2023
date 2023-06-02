@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <cmath>
+#include <omp.h>
 
 #ifndef SEED
 #define SEED 10
@@ -133,7 +134,7 @@ std::vector<compare_result> emulate_loglik_particle(
 ) {
 
   std::vector<compare_result> similarity(n_replicates);
-  
+
   for (int i = 0; i < n_replicates; i++) {
 
     // simulate_fire
@@ -162,15 +163,18 @@ std::vector<std::vector<compare_result>> emulate_loglik(
 
   std::vector<std::vector<compare_result>> similarity(n_particles);
 
-  #pragma omp parallel firstprivate(n_replicates, n_particles, landscape, ignition_cells, distance, elevation_mean, elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles) shared(rng_splitmix64, similarity) default(none)
+  #pragma omp parallel firstprivate(                                                             \
+      n_replicates, n_particles, landscape, ignition_cells, distance, elevation_mean,            \
+      elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles                             \
+  ) shared(rng_splitmix64, similarity) default(none)
   {
     Xoshiro256plus rng(rng_splitmix64);
 
     #pragma omp for
     for (int part = 0; part < n_particles; part++) {
       similarity[part] = emulate_loglik_particle(
-          rng, landscape, ignition_cells, particles[part], distance, elevation_mean, elevation_sd,
-          upper_limit, fire_ref, fire_ref_stats, n_replicates
+          rng, landscape, ignition_cells, particles[part], distance, elevation_mean,
+          elevation_sd, upper_limit, fire_ref, fire_ref_stats, n_replicates
       );
     }
   }
@@ -189,16 +193,25 @@ Matrix<uint> burned_amounts_per_cell(
 
   Matrix<uint> burned_amounts(landscape.width, landscape.height);
 
-  for (uint i = 0; i < n_replicates; i++) {
-    Fire fire = simulate_fire(
-        rng, landscape, ignition_cells, params, distance, elevation_mean, elevation_sd,
-        upper_limit
-    );
+  #pragma omp parallel firstprivate(                                                             \
+      landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,    \
+      n_replicates                                                               \
+  ) shared(rng_splitmix64, burned_amounts) default(none)
+  {
+    Xoshiro256plus rng(rng_splitmix64);
 
-    for (uint row = 0; row < landscape.width; row++) {
-      for (uint col = 0; col < landscape.height; col++) {
-        if (fire.burned_layer[row, col]) {
-          burned_amounts[row, col] += 1;
+    #pragma omp for
+    for (uint i = 0; i < n_replicates; i++) {
+      Fire fire = simulate_fire(
+          rng, landscape, ignition_cells, params, distance, elevation_mean, elevation_sd,
+          upper_limit
+      );
+
+      for (uint row = 0; row < landscape.width; row++) {
+        for (uint col = 0; col < landscape.height; col++) {
+          if (fire.burned_layer[row, col]) {
+            burned_amounts[row, col] += 1;
+          }
         }
       }
     }
