@@ -5,6 +5,10 @@
 #include <cmath>
 #include <omp.h>
 
+#ifdef BENCHMARKING_OMP
+#include "wtime.hpp"
+#endif
+
 #ifndef SEED
 #define SEED 10
 #endif
@@ -122,7 +126,9 @@ compare_result compare_fires(
                              .sp_quad_5050 = (0.50f * overlap_sp + 0.50f * overlap_quad),
                              .sp_quad_7525 = (0.75f * overlap_sp + 0.25f * overlap_quad)
   };
-
+#ifdef BENCHMARKING_OMP
+  indexes.total_burning_size = std::max(fire1.total_burning_size, fire2.total_burning_size);
+#endif
   return indexes;
 }
 
@@ -163,6 +169,11 @@ std::vector<std::vector<compare_result>> emulate_loglik(
 
   std::vector<std::vector<compare_result>> similarity(n_particles);
 
+#ifdef BENCHMARKING_OMP
+    uint sum_total_burning_size = 0;
+    double start_time, time_elapsed;
+    start_time = wtime();
+#endif
   #pragma omp parallel firstprivate(                                                             \
       n_replicates, n_particles, landscape, ignition_cells, distance, elevation_mean,            \
       elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles                             \
@@ -178,6 +189,17 @@ std::vector<std::vector<compare_result>> emulate_loglik(
       );
     }
   }
+#ifdef BENCHMARKING_OMP
+    time_elapsed = wtime() - start_time;
+    for (int part = 0; part < n_particles; part++) {
+      for (int i = 0; i < n_replicates; i++) {
+        sum_total_burning_size += similarity[part][i].total_burning_size;
+      }
+    }
+    std::cout.precision(17);
+    std::cout << sum_total_burning_size / time_elapsed << "," << sum_total_burning_size << "," << time_elapsed
+              << std::endl;
+#endif
   return similarity;
 }
 

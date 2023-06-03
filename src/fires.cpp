@@ -31,6 +31,9 @@ Fire::Fire(uint width, uint height, std::string filename_prefix)
     burned_layer[x, y] = true;
     burned_ids.push_back({ x, y });
   }
+#ifdef BENCHMARKING_OMP
+  this->total_burning_size = 0;
+#endif
 }
 
 FireStats get_fire_stats(const Fire& fire, const Landscape& landscape) {

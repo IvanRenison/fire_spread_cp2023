@@ -63,6 +63,9 @@ Fire simulate_fire(
     burned_ids.push_back(ignition_cells[i]);
   }
 
+#ifdef BENCHMARKING_OMP
+  uint total_burning_size = 0;
+#endif
 #ifdef GRAPHICS
   std::vector<uint> burned_ids_steps;
   burned_ids_steps.push_back(end);
@@ -188,6 +191,9 @@ Fire simulate_fire(
     std::cout << burned_cell_per_time << "," << burning_size << "," << time_elapsed
               << std::endl;
 #endif
+#ifdef BENCHMARKING_OMP
+    total_burning_size +=  burning_size;
+#endif
 #ifdef GRAPHICS
     burned_ids_steps.push_back(end_forward);
 #endif
@@ -200,6 +206,9 @@ Fire simulate_fire(
 
   Fire fire(n_col, n_row, burned_bin, burned_ids);
 
+#ifdef BENCHMARKING_OMP
+  fire.total_burning_size =  total_burning_size;
+#endif
 #ifdef GRAPHICS
   fire.burned_ids_steps = burned_ids_steps;
 #endif

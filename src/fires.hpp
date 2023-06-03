@@ -18,6 +18,9 @@ public:
 
   std::vector<std::pair<uint, uint>> burned_ids;
 
+#ifdef BENCHMARKING_OMP
+  uint total_burning_size;
+#endif
 #ifdef GRAPHICS
   // Positions in burned_ids where a new step starts
   std::vector<uint> burned_ids_steps;

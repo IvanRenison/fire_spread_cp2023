@@ -23,6 +23,9 @@ typedef struct _s_compare_result {
   float sp_expquad_7525;
   float sp_quad_5050;
   float sp_quad_7525;
+#ifdef BENCHMARKING_OMP
+  uint total_burning_size;
+#endif
 } compare_result;
 
 // Function compare two fires using many similarity indexes, to try them as proxies for the
