@@ -133,7 +133,7 @@ compare_result compare_fires(
 }
 
 std::vector<compare_result> emulate_loglik_particle(
-    Xoshiro256plus& rng, const Landscape& landscape,
+    splitmix64& rng_splitmix64, const Landscape& landscape,
     const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams params,
     float distance, float elevation_mean, float elevation_sd, float upper_limit,
     const Fire& fire_ref, const FireStats& fire_ref_stats, int n_replicates
@@ -145,8 +145,8 @@ std::vector<compare_result> emulate_loglik_particle(
 
     // simulate_fire
     Fire fire_sim = simulate_fire(
-        rng, landscape, ignition_cells, params, distance, elevation_mean, elevation_sd,
-        upper_limit
+        rng_splitmix64, landscape, ignition_cells, params, distance, elevation_mean,
+        elevation_sd, upper_limit
     );
 
     similarity[i] =
@@ -170,35 +170,28 @@ std::vector<std::vector<compare_result>> emulate_loglik(
   std::vector<std::vector<compare_result>> similarity(n_particles);
 
 #ifdef BENCHMARKING_OMP
-    uint sum_total_burning_size = 0;
-    double start_time, time_elapsed;
-    start_time = wtime();
+  uint sum_total_burning_size = 0;
+  double start_time, time_elapsed;
+  start_time = wtime();
 #endif
-  #pragma omp parallel firstprivate(                                                             \
-      n_replicates, n_particles, landscape, ignition_cells, distance, elevation_mean,            \
-      elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles                             \
-  ) shared(rng_splitmix64, similarity) default(none)
   {
-    Xoshiro256plus rng(rng_splitmix64);
-
-    #pragma omp for
     for (int part = 0; part < n_particles; part++) {
       similarity[part] = emulate_loglik_particle(
-          rng, landscape, ignition_cells, particles[part], distance, elevation_mean,
+          rng_splitmix64, landscape, ignition_cells, particles[part], distance, elevation_mean,
           elevation_sd, upper_limit, fire_ref, fire_ref_stats, n_replicates
       );
     }
   }
 #ifdef BENCHMARKING_OMP
-    time_elapsed = wtime() - start_time;
-    for (int part = 0; part < n_particles; part++) {
-      for (int i = 0; i < n_replicates; i++) {
-        sum_total_burning_size += similarity[part][i].total_burning_size;
-      }
+  time_elapsed = wtime() - start_time;
+  for (int part = 0; part < n_particles; part++) {
+    for (int i = 0; i < n_replicates; i++) {
+      sum_total_burning_size += similarity[part][i].total_burning_size;
     }
-    std::cout.precision(17);
-    std::cout << sum_total_burning_size / time_elapsed << "," << sum_total_burning_size << "," << time_elapsed
-              << std::endl;
+  }
+  std::cout.precision(17);
+  std::cout << sum_total_burning_size / time_elapsed << "," << sum_total_burning_size << ","
+            << time_elapsed << std::endl;
 #endif
   return similarity;
 }
@@ -211,22 +204,13 @@ Matrix<uint> burned_amounts_per_cell(
 
   splitmix64 rng_splitmix64(SEED);
 
-  Xoshiro256plus rng(rng_splitmix64);
-
   Matrix<uint> burned_amounts(landscape.width, landscape.height);
 
-  #pragma omp parallel firstprivate(                                                             \
-      landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,    \
-      n_replicates                                                               \
-  ) shared(rng_splitmix64, burned_amounts) default(none)
   {
-    Xoshiro256plus rng(rng_splitmix64);
-
-    #pragma omp for
     for (uint i = 0; i < n_replicates; i++) {
       Fire fire = simulate_fire(
-          rng, landscape, ignition_cells, params, distance, elevation_mean, elevation_sd,
-          upper_limit
+          rng_splitmix64, landscape, ignition_cells, params, distance, elevation_mean,
+          elevation_sd, upper_limit
       );
 
       for (uint row = 0; row < landscape.width; row++) {

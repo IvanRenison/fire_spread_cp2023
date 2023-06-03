@@ -1,8 +1,8 @@
 #ifndef _MANY_SIMULATIONS_HPP
 #define _MANY_SIMULATIONS_HPP
 
-#include <vector>
 #include <omp.h>
+#include <vector>
 
 #include "fires.hpp"
 #include "landscape.hpp"
@@ -42,7 +42,7 @@ compare_result compare_fires(
 // returns the simulated fire with data useful for comparison. In addition, it takes as
 // arguments data from the observed fire to be compared.
 std::vector<compare_result> emulate_loglik_particle(
-    Xoshiro256plus& rng, const Landscape& landscape,
+    splitmix64& rng_splitmix64, const Landscape& landscape,
     const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams params,
     float distance, float elevation_mean, float elevation_sd, float upper_limit,
     const Fire& fire_ref, const FireStats& fire_ref_stats, int n_replicates = 10

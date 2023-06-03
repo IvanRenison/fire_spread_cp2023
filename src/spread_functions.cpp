@@ -3,6 +3,7 @@
 #define _USE_MATH_DEFINES
 
 #include <cmath>
+#include <omp.h>
 #include <vector>
 
 #include "fires.hpp"
@@ -44,10 +45,15 @@ static inline float spread_probability(
 }
 
 Fire simulate_fire(
-    Xoshiro256plus& rng, const Landscape& landscape,
+    splitmix64& rng_splitmix64, const Landscape& landscape,
     const std::vector<std::pair<uint, uint>>& ignition_cells, const SimulationParams& params,
     float distance, float elevation_mean, float elevation_sd, float upper_limit = 1.0
 ) {
+
+  Xoshiro256plus rng(rng_splitmix64);
+
+  #pragma omp parallel
+  { rng = Xoshiro256plus(rng_splitmix64); }
 
   uint n_row = landscape.height;
   uint n_col = landscape.width;
@@ -78,7 +84,6 @@ Fire simulate_fire(
     burned_bin[cell_0, cell_1] = 1;
   }
   while (burning_size > 0) {
-    int end_forward = end;
 #ifdef BENCHMARKING
     double start_time, burned_cell_per_time, time_elapsed;
     start_time = 0.0;
@@ -91,6 +96,10 @@ Fire simulate_fire(
 
     // b is going to keep the position in burned_ids that have to be evaluated
     // in this burn cycle
+    #pragma omp parallel firstprivate(                                                             \
+        start, end, burning_size, n_row, n_col, n_cell, rng, landscape, ignition_cells, params,    \
+        distance, elevation_mean, elevation_sd, upper_limit                                        \
+    ) shared(burned_ids, burned_bin) default(none)
     for (int b = start; b < end; b++) {
       uint burning_cell_0 = burned_ids[b].first;
       uint burning_cell_1 = burned_ids[b].second;
@@ -174,7 +183,6 @@ Fire simulate_fire(
         // store id of recently burned cell and
         // set 1 in burned_bin
         // (but advance end_forward first)
-        end_forward += 1;
         burned_ids.push_back({ neighbour_cell_0, neighbour_cell_1 });
         burned_bin[neighbour_cell_0, neighbour_cell_1] = true;
 
@@ -192,6 +200,7 @@ Fire simulate_fire(
     burned_ids_steps.push_back(end_forward);
 #endif
     // update start and end
+    int end_forward = burned_ids.size();
     start = end;
     end = end_forward;
     burning_size = end - start;
