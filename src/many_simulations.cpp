@@ -127,7 +127,7 @@ compare_result compare_fires(
                              .sp_quad_7525 = (0.75f * overlap_sp + 0.25f * overlap_quad)
   };
 #ifdef BENCHMARKING_OMP
-  indexes.total_burning_size = std::max(fire1.total_burning_size, fire2.total_burning_size);
+  indexes.total_burning_size = fire2.burned_ids.size();
 #endif
   return indexes;
 }
