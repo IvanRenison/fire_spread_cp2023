@@ -175,9 +175,9 @@ std::vector<std::vector<compare_result>> emulate_loglik(
     start_time = wtime();
 #endif
   #pragma omp parallel firstprivate(                                                             \
-      n_replicates, n_particles, landscape, ignition_cells, distance, elevation_mean,            \
+      n_replicates, n_particles, ignition_cells, distance, elevation_mean,            \
       elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles                             \
-  ) shared(rng_splitmix64, similarity) default(none)
+  ) shared(landscape, rng_splitmix64, similarity) default(none)
   {
     Xoshiro256plus rng(rng_splitmix64);
 
@@ -216,9 +216,9 @@ Matrix<uint> burned_amounts_per_cell(
   Matrix<uint> burned_amounts(landscape.width, landscape.height);
 
   #pragma omp parallel firstprivate(                                                             \
-      landscape, ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,    \
+      ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,    \
       n_replicates                                                               \
-  ) shared(rng_splitmix64, burned_amounts) default(none)
+  ) shared(landscape, rng_splitmix64, burned_amounts) default(none)
   {
     Xoshiro256plus rng(rng_splitmix64);
 
