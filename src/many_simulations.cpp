@@ -170,13 +170,13 @@ std::vector<std::vector<compare_result>> emulate_loglik(
   std::vector<std::vector<compare_result>> similarity(n_particles);
 
 #ifdef BENCHMARKING_OMP
-    uint sum_total_burning_size = 0;
-    double start_time, time_elapsed;
-    start_time = wtime();
+  uint sum_total_burning_size = 0;
+  double start_time, time_elapsed;
+  start_time = wtime();
 #endif
-  #pragma omp parallel firstprivate(                                                             \
-      n_replicates, n_particles, ignition_cells, distance, elevation_mean,            \
-      elevation_sd, upper_limit, fire_ref, fire_ref_stats, particles                             \
+  #pragma omp parallel firstprivate(                                                           \
+          n_replicates, n_particles, ignition_cells, distance, elevation_mean, elevation_sd,   \
+              upper_limit, fire_ref, fire_ref_stats, particles                                 \
   ) shared(landscape, rng_splitmix64, similarity) default(none)
   {
     Xoshiro256plus rng(rng_splitmix64);
@@ -190,15 +190,15 @@ std::vector<std::vector<compare_result>> emulate_loglik(
     }
   }
 #ifdef BENCHMARKING_OMP
-    time_elapsed = wtime() - start_time;
-    for (int part = 0; part < n_particles; part++) {
-      for (int i = 0; i < n_replicates; i++) {
-        sum_total_burning_size += similarity[part][i].total_burning_size;
-      }
+  time_elapsed = wtime() - start_time;
+  for (int part = 0; part < n_particles; part++) {
+    for (int i = 0; i < n_replicates; i++) {
+      sum_total_burning_size += similarity[part][i].total_burning_size;
     }
-    std::cout.precision(17);
-    std::cout << sum_total_burning_size / time_elapsed << "," << sum_total_burning_size << "," << time_elapsed
-              << std::endl;
+  }
+  std::cout.precision(17);
+  std::cout << sum_total_burning_size / time_elapsed << "," << sum_total_burning_size << ","
+            << time_elapsed << std::endl;
 #endif
   return similarity;
 }
@@ -215,9 +215,9 @@ Matrix<uint> burned_amounts_per_cell(
 
   Matrix<uint> burned_amounts(landscape.width, landscape.height);
 
-  #pragma omp parallel firstprivate(                                                             \
-      ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,    \
-      n_replicates                                                               \
+  #pragma omp parallel firstprivate(                                                           \
+          ignition_cells, params, distance, elevation_mean, elevation_sd, upper_limit,         \
+              n_replicates                                                                     \
   ) shared(landscape, rng_splitmix64, burned_amounts) default(none)
   {
     Xoshiro256plus rng(rng_splitmix64);
